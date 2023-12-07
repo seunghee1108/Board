@@ -44,7 +44,7 @@ app.get('/test', (req, res) => {
 
 app.get('/list', async(req, res) => {
   let result = await db.collection('post').find().toArray()
-  res.render('index.ejs', { 글목록 : result })
+  res.render('list.ejs', { 글목록 : result })
 })
 
 app.get('/write', (req, res) => {
