@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 // DB에 잘 저장되는지 test
 app.get('/test', (req, res) => {
   // data : collection name 
-  db.collection('data').insertOne({title : '테스트'})
+  db.collection('post').insertOne({title : '테스트'})
   .then(result => {
     res.send('테스트 데이터 삽입 성공');
 })
@@ -67,7 +67,7 @@ app.post('/newPost', async(req, res) => {
 
 app.get('/detail/:abcd', async(req, res) => {
   // findOne() : document 1개만 찾고 싶을 때 사용 
-  let result = await db.collection('data').findOne({ _id : new ObjectId('656c873cc58888e137f76a52') })
+  let result = await db.collection('post').findOne({ _id : new ObjectId('656c873cc58888e137f76a52') })
   console.log(result)
   res.render('detail.ejs')
 })
