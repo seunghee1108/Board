@@ -92,53 +92,14 @@ app.get('/detail/:id', async(req, res) => {
   console.log( req.params)
   res.render('detail.ejs', { result : result })
   // findOne() : document 1개만 찾고 싶을 때 사용 
-  // let result = await db.collection('post').findOne({ _id : new ObjectId('params.id') }) 
-  // console.log(res.params)
-  // res.render('detail.ejs', { result : result })
-
-//   try{
-//     let result = await db.collection('post').findOne({ _id : new ObjectId('req.params.id') })
-//     if (result == null) {
-//       res.status(400).send('그런 글 없음')
-//     } else {
-//       res.render('detail.ejs', { result : result })
-//     }
-//     // console.log(res.params)
-//     // res.render('detail.ejs', { result : result })
-//   } catch(e){
-//     console.log(e)
-//     res.send('dj')
-//     // res.status(404).send('')
-//   }
-// })
-
-
-// app.get('/list', async (req, res) => {
-//   try {
-//     let result = await db.collection('post').find().toArray();
-//     res.render('list.ejs', { 글목록: result, result: 'some result value' });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send('글 목록 조회 실패');
-// //   }
-// // });
-
-// app.get('/detail/:abcd', async (req, res) => {
-//   try {
-//     let result = await db.collection('post').findOne({ _id: new ObjectId(req.params.id) });
-//     if (result == null) {
-//       res.status(400).send('글 없음');
-//     } else {
-//       res.render('detail.ejs', { result: result });
-//     }
-//   } catch (e) {
-//     console.log(e);
-//     res.status(500).send('서버 에러');
-//   }
 });
 
 app.get('/edit/:id', async(req, res) => {
-let result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
+//   db.collection('post').updateOne({ a : 1}, {$set: { a : 2}
+// })
+
+let result = await db.collection('post').
+findOne({ _id : new ObjectId(req.params.id) })
 console.log(result)
   res.render('edit.ejs', { result : result })
 })
