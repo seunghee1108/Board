@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body class="grey-bg">
+  
+  <!-- header.ejs 파일 재사용  -->
+  <%- include('header.ejs') %>
+
+  <div class="white-bg">
+    <!-- 글이 여러개가 될 수 있으니 length로 작성 -->
+    <% for(let i = 0; i < 글목록.length; i++) { %>
+      <div class="list-box">
+        <h4><%= 글목록[i].title %></h4>
+        <%= 글목록[i].content %>
+      </div>
+  <%  } %>
+  </div> 
+
+</body>
+</body>
+</html>
