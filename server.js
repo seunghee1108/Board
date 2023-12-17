@@ -9,11 +9,31 @@ app.set('view engine', 'ejs')
 // req.body 쓰기 위해 필요
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+// app.use(cookieParser());
 
 const { MongoClient } = require('mongodb')
 const { ObjectId } = require('mongodb') 
-const session = require('express-session')
+// const session = require('express-session')
+// const cookieParser = require('cookie-parser')
+// const bcrypt = require('bcrypt')
+// const path = require('path')
 
+// app.use(cookieParser({
+//   secret: 'test',
+//   resave: false,
+//   saveUninitialized: false,
+// }))
+
+// const user  = [
+//     { id: 1, 
+//       username: 'Bang',
+//       email: 'sh@test.com',
+//       password: '1234'
+//     }
+// ]
+
+// app.get('/', (req, res_))
+//   res.render('')
 
 let db
 const url = 'mongodb+srv://admin:sh123@cluster0.lfkcymr.mongodb.net/?retryWrites=true&w=majority'
@@ -66,9 +86,53 @@ app.post('/newPost', async(req, res) => {
 //   res.render('detail.ejs')
 // })
 
-app.get('/detail/:abcd', async(req, res) => {
+// app.get('/detail/:abcd', async(req, res) => {
+//   req.params
+//   let result = await db.collection('post').findOne({ _id: new ObjectId('') })
+//   console.log( req.params)
+  // res.render('detail.ejs')
   // findOne() : document 1개만 찾고 싶을 때 사용 
-  let result = await db.collection('post').findOne({ _id : new ObjectId('656c873cc58888e137f76a52') })
-  console.log(result)
-  res.render('detail.ejs')
-})
+  // let result = await db.collection('post').findOne({ _id : new ObjectId('params.id') })
+  // console.log(res.params)
+  // res.render('detail.ejs', { result : result })
+
+//   try{
+//     let result = await db.collection('post').findOne({ _id : new ObjectId('req.params.id') })
+//     if (result == null) {
+//       res.status(400).send('그런 글 없음')
+//     } else {
+//       res.render('detail.ejs', { result : result })
+//     }
+//     // console.log(res.params)
+//     // res.render('detail.ejs', { result : result })
+//   } catch(e){
+//     console.log(e)
+//     res.send('dj')
+//     // res.status(404).send('')
+//   }
+// })
+
+
+app.get('/list', async (req, res) => {
+  try {
+    let result = await db.collection('post').find().toArray();
+    res.render('list.ejs', { 글목록: result, result: 'some result value' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('글 목록 조회 실패');
+  }
+});
+
+app.get('/detail/:abcd', async (req, res) => {
+  try {
+    let result = await db.collection('post').findOne({ _id: new ObjectId(req.params.abcd) });
+    if (result == null) {
+      res.status(400).send('그런 글 없음');
+    } else {
+      res.render('detail.ejs', { result: result });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send('서버 에러');
+  }
+});
