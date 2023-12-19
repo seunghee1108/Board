@@ -63,10 +63,16 @@ app.get('/test', (req, res) => {
 });
 })
 
-app.get('/list', async(req, res) => {
-  let result = await db.collection('post').find().toArray()
-  res.render('list.ejs', { 글목록 : result })
-})
+app.get('/list', async (req, res) => {
+  try {
+    let 글목록 = await db.collection('post').find().toArray();
+    res.render('list.ejs', { 글목록: 글목록 });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('글 목록을 불러오는 중 오류가 발생했습니다.');
+  }
+});
+
 
 app.get('/write', (req, res) => {
   res.render('write.ejs')
