@@ -9,21 +9,16 @@
 <body class="main-bg">
   
   <!-- header.ejs 파일 재사용  -->
+ 
   <%- include('header.ejs') %>
 
-  <%= result %>
   <div class="sub-bg">
     <!-- 글이 여러개가 될 수 있으니 length로 작성 -->
-    <% for(let i = 0; i < 글목록.length; i++) { %>
-      <div class="list-box">
-
-        <h4><a href="/detail/<%= 글목록[i]._id %>"><%= 글목록[i].title %></a>
-        </h4>
-        
-        <%= 글목록[i].content %>
-      </div>
-  <%  } %>
-  </div> 
+    <% for (let i = 0; i < 글목록.length; i++) { %>
+      <h2><%= 글목록[i].title %></h2>
+      <p><%= 글목록[i].content %></p>
+    <% } %>
+  </div>
 
 </body>
 </body>
