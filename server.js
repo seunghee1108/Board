@@ -106,3 +106,25 @@ findOne({ _id : new ObjectId(req.params.id) })
 console.log(result)
   res.render('edit.ejs', { result : result })
 })
+
+app.post('/edit/:id', async (req, res) => {
+  try {
+    await db.collection('post').updateOne({ _id: new ObjectId(req.params.id) }, {
+      $set: { title: req.body.title, content: req.body.content }
+    });
+    res.redirect('/list');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('글 수정 중 오류가 발생했습니다.');
+  }
+});
+
+app.get('/delete/:id', async (req, res) => {
+  try {
+    await db.collection('post').deleteOne({ _id: new ObjectId(req.params.id) });
+    res.redirect('/list');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('글 삭제 중 오류가 발생했습니다.');
+  }
+});
