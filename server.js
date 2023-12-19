@@ -101,9 +101,6 @@ app.get('/detail/:id', async(req, res) => {
 });
 
 app.get('/edit/:id', async(req, res) => {
-//   db.collection('post').updateOne({ a : 1}, {$set: { a : 2}
-// })
-
 let result = await db.collection('post').
 findOne({ _id : new ObjectId(req.params.id) })
 console.log(result)
