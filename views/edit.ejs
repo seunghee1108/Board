@@ -1,20 +1,28 @@
+<!-- edit.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Edit Post</title>
   <link rel="stylesheet" href="main.css">
+</head>
+<body class="grey-bg">
   
+  <!-- header.ejs 파일 재사용  -->
   <%- include('header.ejs') %>
 
-  <form class="form-box" action="/add" method="POST">
-    <h4>글 작성</h4>
-    <input name="title" value="<%= result.title %>">
-    <input name="content" value="<%= result.content %>">
-    <button type="submit">전송</button>
-</form> 
+  <div class="white-bg">
+    <form action="/update/<%= post._id %>" method="post">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" value="<%= post.title %>" required>
+      <br>
+      <label for="content">Content:</label>
+      <textarea id="content" name="content" required><%= post.content %></textarea>
+      <br>
+      <button type="submit">Update Post</button>
+    </form>
+  </div>
 
-</body>
 </body>
 </html>
