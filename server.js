@@ -107,17 +107,17 @@ console.log(result)
   res.render('edit.ejs', { result : result })
 })
 
-app.post('/edit/:id', async (req, res) => {
-  try {
-    await db.collection('post').updateOne({ _id: new ObjectId(req.params.id) }, {
-      $set: { title: req.body.title, content: req.body.content }
-    });
-    res.redirect('/list');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('글 수정 중 오류가 발생했습니다.');
-  }
-});
+// app.post('/edit/:id', async (req, res) => {
+//   try {
+//     await db.collection('post').updateOne({ _id: new ObjectId(req.params.id) }, {
+//       $set: { title: req.body.title, content: req.body.content }
+//     });
+//     res.redirect('/list');
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('글 수정 중 오류가 발생했습니다.');
+//   }
+// });
 
 app.get('/delete/:id', async (req, res) => {
   try {
@@ -128,3 +128,38 @@ app.get('/delete/:id', async (req, res) => {
     res.status(500).send('글 삭제 중 오류가 발생했습니다.');
   }
 });
+
+app.get('/edit/:id', async (req, res) => {
+  const postId = req.params.id;
+
+  try {
+    const post = await db.collection('post').findOne({ _id: new ObjectId(postId) });
+    if (!post) {
+      res.status(404).send('Post not found');
+      return;
+    }
+
+    res.render('edit.ejs', { post });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/update/:id', async (req, res) => {
+  const postId = req.params.id;
+  const { title, content } = req.body;
+
+  try {
+    await db.collection('post').updateOne(
+      { _id: new ObjectId(postId) },
+      { $set: { title, content } }
+    );
+
+    res.redirect('/list');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
