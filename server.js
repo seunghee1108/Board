@@ -100,12 +100,12 @@ app.get('/detail/:id', async(req, res) => {
   // findOne() : document 1개만 찾고 싶을 때 사용 
 });
 
-app.get('/edit/:id', async(req, res) => {
-let result = await db.collection('post').
-findOne({ _id : new ObjectId(req.params.id) })
-console.log(result)
-  res.render('edit.ejs', { result : result })
-})
+app.get('/edit/:id', async (req, res) => {
+  let result = await db.collection('post').findOne({ _id: new ObjectId(req.params.id) });
+  console.log(result); // 확인을 위한 로그
+
+  res.render('edit.ejs', { result });
+});
 
 // app.post('/edit/:id', async (req, res) => {
 //   try {
