@@ -63,3 +63,8 @@ app.post('/newPost', async(req, res) => {
   res.redirect('/list')
 })
 
+app.get('/edit/:id', async (req, res) => {
+  let result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) });
+  console.log(result)
+  res.render('edit.ejs', { post: result });
+});
