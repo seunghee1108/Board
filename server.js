@@ -73,3 +73,10 @@ app.post('/newPost', async(req, res) => {
   }
 });
 
+app.get('/detail/:abcd', async(req, res) => {
+  // res.params
+  // const result =  await db.collection('post').findOne({ _id : new ObjectId('6584d61998f9c02ad1a1207c') })
+  console.log(req.params)
+  res.render('detail.ejs')
+})
+
