@@ -55,29 +55,21 @@ app.get('/list', async (req, res) => {
 
 app.get('/write', (req, res) => {
   res.render('write.ejs')
-})
-
+});
 
 app.post('/newPost', async(req, res) => {
-  await db.collection('post').insertOne({ title : req.body.title, content : req.body.content })
-  res.redirect('/list')
-})
-
-app.get('/edit/:id', async (req, res) => {
+  console.log(req.body)
+  
   try {
-    const postId = req.params.id;
-    const isValidObjectId = ObjectId.isValid(postId);
-
-    if (!isValidObjectId) {
-      console.error('Invalid ObjectId:', postId);
-      res.status(400).send('Invalid ObjectId');
-      return;
+    if (req.body.title == '') {
+      res.send('제목을 입력해주세요')
+    } else {
+      await db.collection('post').insertOne({ title : req.body.title, content : req.body.content})
+      res.redirect('/list')
     }
-
-    const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+  } catch(e) {
+    console.log(e);
+    res.status.send('서버 에러')
   }
 });
+
