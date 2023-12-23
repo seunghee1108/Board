@@ -1,9 +1,11 @@
 const express = require("express");
 const app = express();
+const path = require("path"); 
 
 const PORT = 3000;
 
-app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs')
 
 // req.body 쓰기 위해 필요
@@ -18,6 +20,7 @@ const { ObjectId } = require('mongodb')
 
 let db
 const url = 'mongodb+srv://admin:sh123@cluster0.lfkcymr.mongodb.net/?retryWrites=true&w=majority'
+
 new MongoClient(url).connect().then((client) => {
   console.log('DB연결성공')
   db = client.db('Board')
@@ -88,9 +91,6 @@ app.get('/detail/:id', async(req, res) => {
 })
 // 글 수정 기능
 app.get('/edit/:id', async(req, res) => {
-
-  // db.collection('post').updateOne( { }, { $set : {} 
-  // })
 
   const result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
   console.log(result)
