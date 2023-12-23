@@ -13,6 +13,8 @@ app.use(express.urlencoded({extended:true}))
 
 const { MongoClient } = require('mongodb')
 const { ObjectId } = require('mongodb') 
+// const objectId = new ObjectId(yourIdValue);
+
 
 let db
 const url = 'mongodb+srv://admin:sh123@cluster0.lfkcymr.mongodb.net/?retryWrites=true&w=majority'
@@ -74,9 +76,6 @@ app.post('/newPost', async(req, res) => {
 });
 
 app.get('/detail/:id', async(req, res) => {
-  // req.params
-  // const result = await db.collection('post').findOne({ _id: req.params.id });
-  
   try {
     const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
     console.log(req.params)
@@ -87,4 +86,14 @@ app.get('/detail/:id', async(req, res) => {
     res.status(400).send('으에')
   }
 })
+// 글 수정 기능
+app.get('/edit/:id', async(req, res) => {
 
+  // db.collection('post').updateOne( { }, { $set : {} 
+  // })
+
+  const result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
+  console.log(result)
+  res.render('edit.ejs', { result : result })
+
+})
