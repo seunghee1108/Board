@@ -12,7 +12,7 @@
   <%- include('header.ejs') %>
 
   <div class="white-bg">
-    <form action="/update/<%= post._id %>" method="post">
+    <form action="/update/<%= post._id %>" method="POST">
       <label for="title">Title:</label>
       <input type="text" id="title" name="title" value="<%= result.title %>" required>
       <br>

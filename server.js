@@ -100,12 +100,12 @@ app.get('/detail/:id', async(req, res) => {
   // findOne() : document 1개만 찾고 싶을 때 사용 
 });
 
-app.get('/edit/:id', async (req, res) => {
-  let result = await db.collection('post').findOne({ _id: new ObjectId(req.params.id) });
-  console.log(result); // 확인을 위한 로그
+// app.get('/edit/:id', async (req, res) => {
+//   let result = await db.collection('post').findOne({ _id: new ObjectId(req.params.id) });
+//   console.log(result); // 확인을 위한 로그
 
-  res.render('edit.ejs', { result });
-});
+//   res.render('edit.ejs', { result });
+// });
 
 // app.post('/edit/:id', async (req, res) => {
 //   try {
@@ -129,20 +129,21 @@ app.get('/delete/:id', async (req, res) => {
   }
 });
 
+// edit 페이지 수정 버튼 계속 에러 발생
 app.get('/edit/:id', async (req, res) => {
   const postId = req.params.id;
 
   try {
     const post = await db.collection('post').findOne({ _id: new ObjectId(postId) });
-    if (!post) {
-      res.status(404).send('Post not found');
+    if (!result) {
+      res.status(404).send('포스터 찾을 수 없다');
       return;
     }
 
-    res.render('edit.ejs', { post });
+    res.render('edit.ejs', { result });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('내부 서버 오류');
   }
 });
 
