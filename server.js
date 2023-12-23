@@ -63,7 +63,3 @@ app.post('/newPost', async(req, res) => {
   res.redirect('/list')
 })
 
-
-app.get('/edit/:id', async (req, res) => {
-  // 라우트 핸들러 내용
-});
