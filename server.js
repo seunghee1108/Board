@@ -64,7 +64,20 @@ app.post('/newPost', async(req, res) => {
 })
 
 app.get('/edit/:id', async (req, res) => {
-  let result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) });
-  console.log(result)
-  res.render('edit.ejs', { post: result });
+  try {
+    const postId = req.params.id;
+    const isValidObjectId = ObjectId.isValid(postId);
+
+    if (!isValidObjectId) {
+      console.error('Invalid ObjectId:', postId);
+      res.status(400).send('Invalid ObjectId');
+      return;
+    }
+
+    const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
