@@ -6,14 +6,15 @@
   <title>Document</title>
   <link rel="stylesheet" href="main.css">
 </head>
-  
-  <%- include('header.ejs') %>
-  <div class="detail-bg">
-    <h4>글제목</h4>
-    <p>글내용</p>
-</div> 
- 
+<body class="grey-bg">
 
-</body>
+  <%- include('header.ejs') %>
+
+  <!-- <%= JSON.stringify(result) %> -->
+  <div class="detail-bg">
+    <h4><%= result.title %></h4>
+    <p><%= result.content %></p>
+</div> 
+
 </body>
 </html>
