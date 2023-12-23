@@ -73,10 +73,18 @@ app.post('/newPost', async(req, res) => {
   }
 });
 
-app.get('/detail/:abcd', async(req, res) => {
-  // res.params
-  // const result =  await db.collection('post').findOne({ _id : new ObjectId('6584d61998f9c02ad1a1207c') })
-  console.log(req.params)
-  res.render('detail.ejs')
+app.get('/detail/:id', async(req, res) => {
+  // req.params
+  // const result = await db.collection('post').findOne({ _id: req.params.id });
+  
+  try {
+    const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
+    console.log(req.params)
+    res.render('detail.ejs' ,{ result : result })
+
+  } catch(e) {
+    console.log(e);
+    res.status(400).send('으에')
+  }
 })
 
