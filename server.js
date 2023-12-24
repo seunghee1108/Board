@@ -1,11 +1,11 @@
 const express = require("express");
 const app = express();
-const path = require("path"); 
+// const path = require("path"); 
 
 const PORT = 3000;
 
-// app.use(express.static(__dirname + '/public'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname + '/public'));
+// app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs')
 
 // req.body 쓰기 위해 필요
@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended:true}))
 
 const { MongoClient } = require('mongodb')
 const { ObjectId } = require('mongodb') 
-// const objectId = new ObjectId(yourIdValue);
+// const objectId = new ObjectId('');
 
 
 let db
@@ -89,6 +89,7 @@ app.get('/detail/:id', async(req, res) => {
     res.status(400).send('으에')
   }
 })
+
 // 글 수정 기능
 app.get('/edit/:id', async(req, res) => {
 
