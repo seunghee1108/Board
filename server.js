@@ -92,6 +92,7 @@ app.get('/detail/:id', async(req, res) => {
 
 // 글 수정 기능
 app.get('/edit/:id', async(req, res) => {
+
   const postId = req.params.id;
 
   if (!ObjectId.isValid(postId)) {
@@ -104,8 +105,12 @@ app.get('/edit/:id', async(req, res) => {
 
 })
 
+// 수정 버튼 누르고 수정할 내용 작성
 app.post('/edit/', async(req, res) => {
-  // await db.collection('post').updateOne({},{$set : { title : '새로운 글제목' , content : '새로운 내용' }})
+
+  await db.collection('post').updateOne({ _id : new ObjectId(req.body.id)},
+  { $set : { title : req.body.title , content : req.body.content }}
+  )
     console.log(req.body)
     res.redirect('/list')
 })
