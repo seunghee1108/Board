@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 // const path = require("path"); 
 
-const PORT = 3001;
+const PORT = 3000;
 
 app.use(express.static(__dirname + '/public'));
 // app.use(express.static(path.join(__dirname, 'public')));
@@ -92,6 +92,11 @@ app.get('/detail/:id', async(req, res) => {
 
 // 글 수정 기능
 app.get('/edit/:id', async(req, res) => {
+  const postId = req.params.id;
+  
+  if (!ObjectId.isValid(postId)) {
+    return res.status(404).send('Invalid post ID');
+  }
 
   const result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
   console.log(result)
