@@ -114,3 +114,10 @@ app.post('/edit/', async(req, res) => {
     console.log(req.body)
     res.redirect('/list')
 })
+
+app.post('/abcd', async(req, res) => {
+
+  console.log('안녕')
+  
+
+})
