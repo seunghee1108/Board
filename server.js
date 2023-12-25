@@ -125,3 +125,14 @@ app.get('/delete/:id', async (req, res) => {
     res.status(500).send('글 삭제 중 오류가 발생했습니다.');
   }
 });
+
+// 글 목록 페이지 나누기 
+app.get('/list/:id', async(req, res) => {
+  const result = await db.collection('post').find().skip((req.params.id - 1) * 5 ).limit(5).toArray()
+  res.render('list.ejs', { 글목록 : result })
+})
+
+app.get('/list/next/:id', async(req, res) => {
+  const result = await db.collection('post').find({ _id : { $gt : new ObjectId(req.params.id) }}).limit(5).toArray()
+  res.render('list.ejs', { 글목록 : result })
+})
