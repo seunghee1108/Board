@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="main.css">
 </head>
 <body class="grey-bg">
-  
+
   <!-- header.ejs 파일 재사용  -->
  
   <%- include('header.ejs') %>
@@ -18,12 +18,25 @@
         <h2>
           <a href="/detail/<%= 글목록[i]._id %>"><%= 글목록[i].title %></a>
           <a href="/edit/<%= 글목록[i]._id %>">수정</a>
+          <span class="delete">삭제</span>
         </h2>
-
        <p>글 내용</p>
       </div>
     <% } %>
+
   </div>
-  
+
+  <script>
+    document.querySelectorAll('.delete')[0].addEventListener('click', function() {
+      fetch('/abcd', {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({ a : 1 })
+      })
+    })
+  </script>
+
 </body>
 </html>
