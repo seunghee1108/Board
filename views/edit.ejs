@@ -10,8 +10,8 @@
   
   <%- include('header.ejs') %>
 
-  <form class="form-box" action="/id" method="POST">
-    <h4>글 작성</h4>
+  <form class="form-box" action="/edit" method="POST">
+    <h4>수정</h4>
     <input name="title" value="<%= result.title %>">
     <input name="content" value="<%= result.content %>">
     <button type="submit">전송</button>
