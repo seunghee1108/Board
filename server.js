@@ -1,21 +1,32 @@
 const express = require("express");
 const app = express();
-// const path = require("path"); 
 
 const PORT = 3000;
 
+const { MongoClient } = require('mongodb')
+const { ObjectId } = require('mongodb') 
+
 app.use(express.static(__dirname + '/public'));
-// app.use(express.static(path.join(__dirname, 'public')));
+
 app.set('view engine', 'ejs')
 
 // req.body 쓰기 위해 필요
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-// app.use(cookieParser());
 
-const { MongoClient } = require('mongodb')
-const { ObjectId } = require('mongodb') 
-// const objectId = new ObjectId('');
+const session = require('express-session')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+
+app.use(passport.initialize())
+app.use(session({
+  secret: '암호화에 쓸 비번',
+  resave : false,
+  saveUninitialized : false,
+  cookie : { maxAge : 60 * 60 * 1000 }
+}))
+
+app.use(passport.session()) 
 
 
 let db
@@ -135,4 +146,64 @@ app.get('/list/:id', async(req, res) => {
 app.get('/list/next/:id', async(req, res) => {
   const result = await db.collection('post').find({ _id : { $gt : new ObjectId(req.params.id) }}).limit(5).toArray()
   res.render('list.ejs', { 글목록 : result })
+})
+
+// 제출한 id, pw가 db랑 일치하는지 검사 
+passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
+  let result = await db.collection('user').findOne({ username : 입력한아이디})
+  if (!result) {
+    return cb(null, false, { message: '아이디 DB에 없음' })
+  }
+  if (result.password == 입력한비번) {
+    return cb(null, result)
+  } else {
+    return cb(null, false, { message: '비번불일치' });
+  }
+}))
+
+passport.serializeUser((user, done) => {
+  console.log(user)
+  process.nextTick(() => {
+    done(null, { id: user._id, username: user.username })
+  })
+})
+
+passport.deserializeUser(async (user, done) => {
+  const result = await db.collection('user').findOne({ _id : new ObjectId(user.id) })
+  delete result.password
+  process.nextTick(() => {
+    return done(null, result)
+  })
+})
+
+
+// 로그인 기능
+app.get('/login', async (req, res) => {
+  console.log(req.user)
+  res.render('login.ejs')
+})
+
+app.post('/login', async (req, res, next) => {
+
+  passport.authenticate('local', (error, user, info) => { 
+    if(error) return res.status(500).json(error)
+    if(!user) return res.status(401).json(info.message)
+    req.logIn(user, (err) => {
+      if(err) return next(err)
+      res.redirect('/')
+   })
+  })(req, res, next)
+
+})
+
+app.get('/join', (req, res) => {
+  res.render('join.ejs')
+})
+
+app.post('/join', async (req, res) => {
+  await db.collection('user').insertOne({ 
+    username : req.body.username,
+    password : req.body.password
+  })
+  res.redirect('/')
 })
