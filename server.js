@@ -93,7 +93,7 @@ app.get('/detail/:id', async(req, res) => {
 // 글 수정 기능
 app.get('/edit/:id', async(req, res) => {
   const postId = req.params.id;
-  
+
   if (!ObjectId.isValid(postId)) {
     return res.status(404).send('Invalid post ID');
   }
@@ -102,4 +102,10 @@ app.get('/edit/:id', async(req, res) => {
   console.log(result)
   res.render('edit.ejs', { result : result })
 
+})
+
+app.post('/edit/', async(req, res) => {
+  // await db.collection('post').updateOne({},{$set : { title : '새로운 글제목' , content : '새로운 내용' }})
+    console.log(req.body)
+    res.redirect('/list')
 })
