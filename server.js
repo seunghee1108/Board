@@ -115,11 +115,13 @@ app.post('/edit/', async(req, res) => {
     res.redirect('/list')
 })
 
-app.post('/delete', async(req, res) => {
-  await db.collection('post').deleteOne({ _id : new ObjectId(req.query.docid)},
-  console.log(req,query)
-  )
-  res.send('삭제 완료')
-  console.log('안녕')
-
-})
+// 글 삭제 기능
+app.get('/delete/:id', async (req, res) => {
+  try {
+    await db.collection('post').deleteOne({ _id: new ObjectId(req.params.id) });
+    res.redirect('/list');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('글 삭제 중 오류가 발생했습니다.');
+  }
+});
