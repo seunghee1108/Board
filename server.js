@@ -196,6 +196,7 @@ app.post('/login', async (req, res, next) => {
 
 })
 
+// 가입 기능
 app.get('/join', (req, res) => {
   res.render('join.ejs')
 })
