@@ -183,18 +183,34 @@ app.get('/login', async (req, res) => {
   res.render('login.ejs')
 })
 
+// app.post('/login', async (req, res, next) => {
+
+//   passport.authenticate('local', (error, user, info) => { 
+//     if(error) return res.status(500).json(error)
+//     if(!user) return res.status(401).json(info.message)
+//     req.logIn(user, (err) => {
+//       if(err) return next(err)
+//       res.redirect('/index.ejs')
+//    })
+//   })(req, res, next)
+
+// })
+
 app.post('/login', async (req, res, next) => {
-
   passport.authenticate('local', (error, user, info) => { 
-    if(error) return res.status(500).json(error)
-    if(!user) return res.status(401).json(info.message)
-    req.logIn(user, (err) => {
-      if(err) return next(err)
-      res.redirect('/')
-   })
-  })(req, res, next)
+    if (error) return res.status(500).json(error);
+    if (!user) return res.status(401).json(info.message);
 
-})
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+
+      // 로그인 성공시에는 원하는 작업을 수행하고 리다이렉트
+      console.log(`User ${user.username} logged in successfully.`);
+      return res.redirect('/list.ejs');
+    });
+  })(req, res, next);
+});
+
 
 // 가입 기능
 app.get('/join', (req, res) => {
@@ -206,5 +222,5 @@ app.post('/join', async (req, res) => {
     username : req.body.username,
     password : req.body.password
   })
-  res.redirect('/')
+  res.redirect('/index.ejs')
 })
