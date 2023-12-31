@@ -220,7 +220,8 @@ app.get('/join', (req, res) => {
 app.post('/join', async (req, res) => {
   await db.collection('user').insertOne({ 
     username : req.body.username,
-    password : req.body.password
+    password : req.body.password,
+    email : req.body.email
   })
   res.redirect('/index.ejs')
 })
