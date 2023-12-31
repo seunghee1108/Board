@@ -206,7 +206,7 @@ app.post('/login', async (req, res, next) => {
 
       // 로그인 성공시에는 원하는 작업을 수행하고 리다이렉트
       console.log(`User ${user.username} logged in successfully.`);
-      return res.redirect('/list.ejs');
+      return res.redirect('/');
     });
   })(req, res, next);
 });
