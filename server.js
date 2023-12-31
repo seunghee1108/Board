@@ -225,3 +225,6 @@ app.post('/join', async (req, res) => {
   })
   res.redirect('/')  // 메인페이지로 이동
 })
+
+// 이미지 업로드 기능
+
