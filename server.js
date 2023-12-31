@@ -223,5 +223,5 @@ app.post('/join', async (req, res) => {
     password : req.body.password,
     email : req.body.email
   })
-  res.redirect('/index.ejs')
+  res.redirect('/')
 })
