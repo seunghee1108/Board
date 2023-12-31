@@ -202,11 +202,11 @@ app.post('/login', async (req, res, next) => {
     if (!user) return res.status(401).json(info.message);
 
     req.logIn(user, (err) => {
-      if (err) return next(err);
+      if (err) return next(err); 
 
       // 로그인 성공시에는 원하는 작업을 수행하고 리다이렉트
       console.log(`User ${user.username} logged in successfully.`);
-      return res.redirect('/');
+      return res.redirect('/');  // 메인페이지로 이동
     });
   })(req, res, next);
 });
@@ -223,5 +223,5 @@ app.post('/join', async (req, res) => {
     password : req.body.password,
     email : req.body.email
   })
-  res.redirect('/')
+  res.redirect('/')  // 메인페이지로 이동
 })
