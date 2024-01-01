@@ -41,7 +41,7 @@ const s3 = new S3Client({
 })
 
 
-// // s3 bucket
+// s3 bucket
 const upload = multer({
   storage: multerS3({
     s3: s3,
@@ -256,3 +256,4 @@ app.post('/join', async (req, res) => {
 
 
 // * list 페이지에서 다음 버튼 누르면 에러 발생
+// * 엑세스 키 입력해야 됨
