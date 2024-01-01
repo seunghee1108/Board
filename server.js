@@ -28,6 +28,30 @@ app.use(session({
 
 app.use(passport.session()) 
 
+// iam 계정 액세스 키
+const { S3Client } = require('@aws-sdk/client-s3')
+const multer = require('multer')
+const multerS3 = require('multer-s3')
+const s3 = new S3Client({
+  region : 'ap-northeast-2',
+  credentials : {
+      accessKeyId : 'AKIAYLH2UFYEMEP4KGK3',
+      secretAccessKey : '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'
+  }
+})
+
+
+// // s3 bucket
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'aws-firstproject',
+    key: function (요청, file, cb) {
+      cb(null, Date.now().toString()) //업로드시 파일명 변경가능
+    }
+  })
+})
+
 
 let db
 const url = 'mongodb+srv://admin:sh123@cluster0.lfkcymr.mongodb.net/?retryWrites=true&w=majority'
@@ -73,20 +97,22 @@ app.get('/write', (req, res) => {
   res.render('write.ejs')
 });
 
-app.post('/newPost', async(req, res) => {
+app.post('/newPost', upload.single('image'), async(req, res) => {
   console.log(req.body)
   
-  try {
-    if (req.body.title == '') {
-      res.send('제목을 입력해주세요')
-    } else {
-      await db.collection('post').insertOne({ title : req.body.title, content : req.body.content})
-      res.redirect('/list')
-    }
-  } catch(e) {
-    console.log(e);
-    res.status.send('서버 에러')
-  }
+  console.log(req.file )
+
+//   try {
+//     if (req.body.title == '') {
+//       res.send('제목을 입력해주세요')
+//     } else {
+//       await db.collection('post').insertOne({ title : req.body.title, content : req.body.content})
+//       res.redirect('/list')
+//     }
+//   } catch(e) {
+//     console.log(e);
+//     res.status.send('서버 에러')
+//   }
 });
 
 app.get('/detail/:id', async(req, res) => {
@@ -227,4 +253,4 @@ app.post('/join', async (req, res) => {
 })
 
 // 이미지 업로드 기능
-
+// 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
