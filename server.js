@@ -97,22 +97,24 @@ app.get('/write', (req, res) => {
   res.render('write.ejs')
 });
 
+// 글 작성 + 이미지 업로드 기능 추가
+// 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
 app.post('/newPost', upload.single('image'), async(req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   
-  console.log(req.file )
+  // console.log(req.file.location)
 
-//   try {
-//     if (req.body.title == '') {
-//       res.send('제목을 입력해주세요')
-//     } else {
-//       await db.collection('post').insertOne({ title : req.body.title, content : req.body.content})
-//       res.redirect('/list')
-//     }
-//   } catch(e) {
-//     console.log(e);
-//     res.status.send('서버 에러')
-//   }
+  try {
+    if (req.body.title == '') {
+      res.send('제목을 입력해주세요')
+    } else {
+      await db.collection('post').insertOne({ title : req.body.title, content : req.body.content, img : req.file.location })
+      res.redirect('/list')
+    }
+  } catch(e) {
+    console.log(e);
+    res.status.send('서버 에러')
+  }
 });
 
 app.get('/detail/:id', async(req, res) => {
@@ -251,6 +253,3 @@ app.post('/join', async (req, res) => {
   })
   res.redirect('/')  // 메인페이지로 이동
 })
-
-// 이미지 업로드 기능
-// 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
