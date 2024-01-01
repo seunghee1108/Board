@@ -253,3 +253,6 @@ app.post('/join', async (req, res) => {
   })
   res.redirect('/')  // 메인페이지로 이동
 })
+
+
+// * list 페이지에서 다음 버튼 누르면 에러 발생
