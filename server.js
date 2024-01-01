@@ -35,8 +35,8 @@ const multerS3 = require('multer-s3')
 const s3 = new S3Client({
   region : 'ap-northeast-2',
   credentials : {
-      accessKeyId : 'AKIAYLH2UFYEMEP4KGK3',
-      secretAccessKey : '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'
+      accessKeyId : '',
+      secretAccessKey : ''
   }
 })
 
