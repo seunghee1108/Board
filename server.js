@@ -36,12 +36,11 @@ const s3 = new S3Client({
   region : 'ap-northeast-2',
   credentials : {
       accessKeyId : 'AKIAYLH2UFYEMEP4KGK3',
-      secretAccessKey : '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'
+      secretAccessKey : 'S9msTxLL5PBeNnReMax0IwsaNombZ10rD5Ab5eqY' // 환경변수로 작성해야 됨
   }
 })
 
-
-// // s3 bucket
+// s3 bucket
 const upload = multer({
   storage: multerS3({
     s3: s3,
