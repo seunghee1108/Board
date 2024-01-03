@@ -256,3 +256,4 @@ app.post('/join', async (req, res) => {
 
 
 // * list 페이지에서 다음 버튼 누르면 에러 발생
+// * IAM bucket 새로 만들어야 됨
