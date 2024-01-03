@@ -29,27 +29,28 @@ app.use(session({
 app.use(passport.session()) 
 
 // iam 계정 액세스 키
-const { S3Client } = require('@aws-sdk/client-s3')
-const multer = require('multer')
-const multerS3 = require('multer-s3')
-const s3 = new S3Client({
-  region : 'ap-northeast-2',
-  credentials : {
-      accessKeyId : 'AKIAYLH2UFYEMEP4KGK3',
-      secretAccessKey : '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' // 작성한 액세스 키 삭제함, 환경변수로 작성해야 됨
-  }
-})
+// * IAM bucket 새로 만들어야 됨
+// const { S3Client } = require('@aws-sdk/client-s3')
+// const multer = require('multer')
+// const multerS3 = require('multer-s3')
+// const s3 = new S3Client({
+//   region : 'ap-northeast-2',
+//   credentials : {
+//       accessKeyId : 'AKIAYLH2UFYEMEP4KGK3',
+//       secretAccessKey : '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' // 작성한 액세스 키 삭제함, 환경변수로 작성해야 됨
+//   }
+// })
 
 // s3 bucket
-const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: 'aws-firstproject',
-    key: function (요청, file, cb) {
-      cb(null, Date.now().toString()) //업로드시 파일명 변경가능
-    }
-  })
-})
+// const upload = multer({
+//   storage: multerS3({
+//     s3: s3,
+//     bucket: 'aws-firstproject',
+//     key: function (요청, file, cb) {
+//       cb(null, Date.now().toString()) //업로드시 파일명 변경가능
+//     }
+//   })
+// })
 
 
 let db
@@ -98,7 +99,7 @@ app.get('/write', (req, res) => {
 
 // 글 작성 + 이미지 업로드 기능 추가
 // 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
-app.post('/newPost', upload.single('image'), async(req, res) => {
+app.post('/newPost',  async(req, res) => {
   // console.log(req.body)
   
   // console.log(req.file.location)
@@ -107,7 +108,7 @@ app.post('/newPost', upload.single('image'), async(req, res) => {
     if (req.body.title == '') {
       res.send('제목을 입력해주세요')
     } else {
-      await db.collection('post').insertOne({ title : req.body.title, content : req.body.content, img : req.file.location })
+      await db.collection('post').insertOne({ title : req.body.title, content : req.body.content })
       res.redirect('/list')
     }
   } catch(e) {
@@ -169,6 +170,18 @@ app.get('/list/:id', async(req, res) => {
   const result = await db.collection('post').find().skip((req.params.id - 1) * 5 ).limit(5).toArray()
   res.render('list.ejs', { 글목록 : result })
 })
+
+// app.get('/list/next/:id', async (req, res) => {
+//   try {
+//     const objectId = new ObjectId(req.params.id); // ObjectId로 변환
+//     const result = await db.collection('post').find({ _id: { $gt: objectId } }).limit(5).toArray();
+//     res.render('list.ejs', { 글목록: result });
+//   } catch (error) {
+//     // ObjectId 변환 실패 시에 대한 처리
+//     console.error('Invalid ObjectId:', req.params.id);
+//     res.status(400).send('Invalid ObjectId');
+//   }
+// });
 
 app.get('/list/next/:id', async(req, res) => {
   const result = await db.collection('post').find({ _id : { $gt : new ObjectId(req.params.id) }}).limit(5).toArray()
@@ -253,6 +266,8 @@ app.post('/join', async (req, res) => {
   res.redirect('/')  // 메인페이지로 이동
 })
 
-
+// ! error 
 // * list 페이지에서 다음 버튼 누르면 에러 발생
-// * IAM bucket 새로 만들어야 됨
+// * 글 쓰기 페이지에서 글 작성 후 전송 누르면 에러 발생
+// * 이미지 부분 주석처리하고 서버 돌려볼 것
+// * 글 작성하면 제목이 제대로 뜨지 않음
