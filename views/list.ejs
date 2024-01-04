@@ -6,7 +6,7 @@
   <title>Document</title>
   <link rel="stylesheet" href="main.css">
 </head>
-<body class="grey-bg">
+  <body class="grey-bg">
  
   <%- include('header.ejs') %>
 
@@ -28,38 +28,8 @@
   <% if (글목록.length > 0) { %>
     <a href="/list/next/<%= 글목록[글목록.length-1]._id %>">다음</a>
   <% } else { %>
-    <!-- 예외 처리 또는 다른 처리 로직 추가 -->
     <p>글목록이 비어있습니다.</p>
   <% } %>
 
-  <!-- <a href="/list/next/<%= 글목록[글목록.length-1]._id %>">다음</a> -->
-  <!-- <a href="/list/next/<%= 글목록.length > 0 ? 글목록[글목록.length-1]._id : '' %>">다음</a> -->
-
-
-
-  <!-- <body class="grey-bg">
- 
-    <% include('header.ejs') %>
-  
-    <div class="white-bg">
-      <% for (let i = 0; i < 글목록.length; i++) { %>
-        <div class="list-box">
-          <h2>
-            <a href="/detail/<%= 글목록[i]._id %>"><%= 글목록[i].title %></a>
-            <a href="/edit/<%= 글목록[i]._id %>">수정</a>
-            <a href="/delete/<%= 글목록[i]._id %>">삭제</a>
-          </h2>
-          <p>글 내용</p>
-        </div>
-      <% } %>
-  
-    </div>
-  
-    <% if (글목록.length > 0) { %>
-      <a href="/list/next/<%= 글목록[글목록.length-1]._id %>">다음</a>
-    <% } %>
-  
-  </body> -->
-
-</body>
+  </body>
 </html>
