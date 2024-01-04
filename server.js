@@ -171,22 +171,17 @@ app.get('/list/:id', async(req, res) => {
   res.render('list.ejs', { 글목록 : result })
 })
 
-// app.get('/list/next/:id', async (req, res) => {
-//   try {
-//     const objectId = new ObjectId(req.params.id); // ObjectId로 변환
-//     const result = await db.collection('post').find({ _id: { $gt: objectId } }).limit(5).toArray();
-//     res.render('list.ejs', { 글목록: result });
-//   } catch (error) {
-//     // ObjectId 변환 실패 시에 대한 처리
-//     console.error('Invalid ObjectId:', req.params.id);
-//     res.status(400).send('Invalid ObjectId');
-//   }
-// });
-
-app.get('/list/next/:id', async(req, res) => {
-  const result = await db.collection('post').find({ _id : { $gt : new ObjectId(req.params.id) }}).limit(5).toArray()
-  res.render('list.ejs', { 글목록 : result })
-})
+app.get('/list/next/:id', async (req, res) => {
+  try {
+    const objectId = new ObjectId(req.params.id); // ObjectId로 변환
+    const result = await db.collection('post').find({ _id: { $gt: objectId } }).limit(5).toArray();
+    res.render('list.ejs', { 글목록: result });
+  } catch (error) {
+    // ObjectId 변환 실패 시에 대한 처리
+    console.error('Invalid ObjectId:', req.params.id);
+    res.status(400).send('Invalid ObjectId');
+  }
+});
 
 // 제출한 id, pw가 db랑 일치하는지 검사 
 passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
@@ -268,6 +263,7 @@ app.post('/join', async (req, res) => {
 
 // ! error 
 // * list 페이지에서 다음 버튼 누르면 에러 발생
+// * list/next 연결하면 이동 됨 
 // * 글 쓰기 페이지에서 글 작성 후 전송 누르면 에러 발생
 // * 이미지 부분 주석처리하고 서버 돌려볼 것
 // * 글 작성하면 제목이 제대로 뜨지 않음
