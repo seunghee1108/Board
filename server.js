@@ -159,6 +159,7 @@ app.get('/detail/:id', async (req, res) => {
       return res.status(404).send('Invalid post ID');
     }
 
+    
     const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
 
     if (!result) {
@@ -353,3 +354,13 @@ app.post('/join', async (req, res) => {
   res.redirect('/')  // 메인페이지로 이동
 })
 
+// 댓글 기능
+app.post('/comment', async (req, res) => {
+  await db.collection('comment').insertOne({ 
+    content: req.body.content,
+    writerId: new ObjectId(req.user.id),
+    writer: req.user.username,
+    parentId: new ObjectId(req.body.parentId) // 수정: parantId -> parentId
+  });
+  res.redirect('back');
+});
