@@ -9,13 +9,15 @@
     
   <%- include('header.ejs') %>
 
-  <form class="form-box" action="/newPost" method="POST" enctype="multipart/form-data">
+  <form class="form-box" action="/newPost" method="POST">
     <h4>글 작성</h4>
     <input name="title" class="input-title">
     <input name="content" class="input-content">
-    <input type="file" name="image" accept="image/*">
+    <!-- <input type="file" name="image" accept="image/*"> -->
     <button type="submit">전송</button>
 </form> 
 
 </body>
 </html>
+
+<!-- enctype="multipart/form-data" -->
