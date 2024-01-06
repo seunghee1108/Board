@@ -29,30 +29,6 @@ app.use(session({
 app.use(passport.session()) 
 
 // iam 계정 액세스 키
-<<<<<<< HEAD
-const { S3Client } = require('@aws-sdk/client-s3')
-const multer = require('multer')
-const multerS3 = require('multer-s3')
-const s3 = new S3Client({
-  region : 'ap-northeast-2',
-  credentials : {
-      accessKeyId : '',
-      secretAccessKey : ''
-  }
-})
-
-
-// s3 bucket
-const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: 'aws-firstproject',
-    key: function (요청, file, cb) {
-      cb(null, Date.now().toString()) //업로드시 파일명 변경가능
-    }
-  })
-})
-=======
 // * IAM bucket 새로 만들어야 됨
 // const { S3Client } = require('@aws-sdk/client-s3')
 // const multer = require('multer')
@@ -75,7 +51,6 @@ const upload = multer({
 //     }
 //   })
 // })
->>>>>>> error/issue10
 
 
 let db
