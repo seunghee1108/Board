@@ -160,13 +160,15 @@ app.get('/detail/:id', async (req, res) => {
     }
 
     
+    const result2 = await db.collection('comment').find({ parentId : new ObjectId(req.params.id) }).toArray();
+
     const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
 
     if (!result) {
       return res.status(404).send('Post not found');
     }
 
-    res.render('detail.ejs', { result: result });
+    res.render('detail.ejs', { result: result , result2 : result2});
   } catch (e) {
     console.error('Error in /detail/:id:', e);
     res.status(500).send('Internal Server Error');
