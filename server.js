@@ -121,17 +121,58 @@ app.post('/newPost',  async(req, res) => {
   }
 });
 
-app.get('/detail/:id', async(req, res) => {
-  try {
-    const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
-    console.log(req.params)
-    res.render('detail.ejs' ,{ result : result })
 
-  } catch(e) {
-    console.log(e);
-    res.status(400).send('으에')
+// app.get('/detail/:id', async(req, res) => {
+//   const postId = req.params.id;
+
+//   if (!ObjectId.isValid(postId)) {
+//     return res.status(404).send('Invalid post ID');
+//   }
+
+//   const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
+  
+//   if (!result) {
+//     return res.status(404).send('Post not found');
+//   }
+
+//   res.render('detail.ejs', { result: result });
+// });
+
+
+// app.get('/detail/:id', async(req, res) => {
+//   try {
+//     const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
+//     console.log(req.params)
+//     res.render('detail.ejs' ,{ result : result })
+
+//   } catch(e) {
+//     console.log(e);
+//     res.status(400).send('으에')
+//   }
+// })
+
+app.get('/detail/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    if (!ObjectId.isValid(postId)) {
+      return res.status(404).send('Invalid post ID');
+    }
+
+    const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
+
+    if (!result) {
+      return res.status(404).send('Post not found');
+    }
+
+    res.render('detail.ejs', { result: result });
+  } catch (e) {
+    console.error('Error in /detail/:id:', e);
+    res.status(500).send('Internal Server Error');
   }
-})
+});
+
+
 
 // 글 수정 기능
 app.get('/edit/:id', async(req, res) => {
@@ -205,7 +246,6 @@ app.delete('/delete', async (req, res) => {
     res.status(500).json({ message: '서버 내부 오류' });
   }
 });
-
 
 
 // 글 목록 페이지 나누기 
@@ -313,10 +353,3 @@ app.post('/join', async (req, res) => {
   res.redirect('/')  // 메인페이지로 이동
 })
 
-// ! error 
-// * list 페이지에서 다음 버튼 누르면 에러 발생 (list/next 연결하면 이동 됨 )
-// * 글 쓰기 페이지에서 글 작성 후 전송 누르면 에러 발생 (넘어가면 글목록 비어있다고 뜸)
-// * 이미지 부분 주석처리하고 서버 돌려볼 것  
-// * 글 작성하면 제목이 제대로 뜨지 않음 (이미지 관련 코드 지우니까 제목 뜸)
-
-// * 글 작성, 수정, 삭제 되었을때 알림창 기능 추가 할 것
