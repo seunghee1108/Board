@@ -151,7 +151,7 @@ app.get('/edit/:id', async(req, res) => {
 // 수정 버튼 누르고 수정할 내용 작성
 app.post('/edit/', async(req, res) => {
 
-  await db.collection('post').updateOne({ _id : new ObjectId(req.body.id)},
+  await db.collection('post').updateOne({ _id : new ObjectId(req.body.id), user : new ObjectId(req.user._id) },
   { $set : { title : req.body.title , content : req.body.content }}
   )
     console.log(req.body)
@@ -161,13 +161,21 @@ app.post('/edit/', async(req, res) => {
 // 글 삭제 기능
 app.get('/delete/:id', async (req, res) => {
   try {
-    await db.collection('post').deleteOne({ _id: new ObjectId(req.params.id) });
+    await db.collection('post').deleteOne({ _id: new ObjectId(req.params.id), user : new ObjectId(req.user._id) });
     res.redirect('/list');
   } catch (error) {
     console.error(error);
     res.status(500).send('글 삭제 중 오류가 발생했습니다.');
   }
 });
+
+// app.delete('/delete', async (req, res) => {
+//   await db.collection('post').deleteOne({
+//     _id : new ObjectId(req.query.docid),
+//     user : new ObjectId(req.user._id)
+//   })
+//   res.send('삭제완료')
+// })
 
 // 글 목록 페이지 나누기 
 // limit(5) 맨 위에서부터 글 5개 보이게 해주세요.
