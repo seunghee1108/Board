@@ -166,6 +166,8 @@ app.get('/delete/:id', async (req, res) => {
 });
 
 // 글 목록 페이지 나누기 
+// limit(5) 맨 위에서부터 글 5개 보이게 해주세요.
+// skip(5) 위에서 5개 건너뛰고 5개만 가져오세요.
 app.get('/list/:id', async(req, res) => {
   const result = await db.collection('post').find().skip((req.params.id - 1) * 5 ).limit(5).toArray()
   res.render('list.ejs', { 글목록 : result })
@@ -173,7 +175,15 @@ app.get('/list/:id', async(req, res) => {
 
 app.get('/list/next/:id', async (req, res) => {
   try {
-    const lastPostId = new ObjectId(req.params.id); // 마지막 글의 ObjectId로 변환
+    console.log('Received parameter value:', req.params.id);
+
+    // 클라이언트에서 전달된 id 값이 ObjectId 형식인지 확인
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).send('Invalid ObjectId format');
+    }
+
+    const lastPostId = new ObjectId(req.params.id);
+
     const result = await db.collection('post').find({ _id: { $gt: lastPostId } }).limit(5).toArray();
     res.render('list.ejs', { 글목록: result });
   } catch (error) {
@@ -181,7 +191,6 @@ app.get('/list/next/:id', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 // 제출한 id, pw가 db랑 일치하는지 검사 
 passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
