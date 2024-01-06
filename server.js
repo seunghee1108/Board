@@ -121,53 +121,122 @@ app.post('/newPost',  async(req, res) => {
   }
 });
 
+// app.get('/detail/:id', async(req, res) => {
+//   try {
+//     const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
+//     console.log(req.params)
+//     res.render('detail.ejs' ,{ result : result })
+
+//   } catch(e) {
+//     console.log(e);
+//     res.status(400).send('으에')
+//   }
+// })
+
 app.get('/detail/:id', async(req, res) => {
   try {
-    const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
-    console.log(req.params)
-    res.render('detail.ejs' ,{ result : result })
+    const result = await db.collection('post').findOne({ _id: new ObjectId(req.params.id) });
+    const postAuthorId = result.user; // 예시로 사용자 ID가 'user' 필드에 있다고 가정
 
-  } catch(e) {
+    res.render('detail.ejs', { result, postAuthorId });
+  } catch (e) {
     console.log(e);
-    res.status(400).send('으에')
+    res.status(400).send('에러');
   }
-})
+});
 
-// 글 수정 기능
-app.get('/edit/:id', async(req, res) => {
 
+// * 작성자만 글 수정, 삭제 가능하게 보여짐
+// 글 수정 페이지 렌더링
+app.get('/edit/:id', async (req, res) => {
   const postId = req.params.id;
 
   if (!ObjectId.isValid(postId)) {
     return res.status(404).send('Invalid post ID');
   }
 
-  const result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
-  console.log(result)
-  res.render('edit.ejs', { result : result })
-
-})
-
-// 수정 버튼 누르고 수정할 내용 작성
-app.post('/edit/', async(req, res) => {
-
-  await db.collection('post').updateOne({ _id : new ObjectId(req.body.id), user : new ObjectId(req.user._id) },
-  { $set : { title : req.body.title , content : req.body.content }}
-  )
-    console.log(req.body)
-    res.redirect('/list')
-})
-
-// 글 삭제 기능
-app.get('/delete/:id', async (req, res) => {
   try {
-    await db.collection('post').deleteOne({ _id: new ObjectId(req.params.id), user : new ObjectId(req.user._id) });
-    res.redirect('/list');
+    const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
+    res.render('edit.ejs', { result });
   } catch (error) {
-    console.error(error);
-    res.status(500).send('글 삭제 중 오류가 발생했습니다.');
+    console.error('Error rendering edit page:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
+
+// 글 수정 처리
+app.post('/edit/:id', async (req, res) => {
+  const postId = req.params.id;
+
+  if (!ObjectId.isValid(postId)) {
+    return res.status(404).send('Invalid post ID');
+  }
+
+  try {
+    await db.collection('post').updateOne(
+      { _id: new ObjectId(postId) },
+      { $set: { title: req.body.title, content: req.body.content } }
+    );
+    res.redirect('/list');
+  } catch (error) {
+    console.error('Error updating post:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// 글 삭제 처리
+app.get('/delete/:id', async (req, res) => {
+  const postId = req.params.id;
+
+  if (!ObjectId.isValid(postId)) {
+    return res.status(404).send('Invalid post ID');
+  }
+
+  try {
+    await db.collection('post').deleteOne({ _id: new ObjectId(postId) });
+    res.redirect('/list');
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+// // 글 수정 기능
+// app.get('/edit/:id', async(req, res) => {
+
+//   const postId = req.params.id;
+
+//   if (!ObjectId.isValid(postId)) {
+//     return res.status(404).send('Invalid post ID');
+//   }
+
+//   const result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
+//   console.log(result)
+//   res.render('edit.ejs', { result : result })
+
+// })
+
+// // 수정 버튼 누르고 수정할 내용 작성
+// app.post('/edit/', async(req, res) => {
+
+//   await db.collection('post').updateOne({ _id : new ObjectId(req.body.id), user : new ObjectId(req.user._id) },
+//   { $set : { title : req.body.title , content : req.body.content }}
+//   )
+//     console.log(req.body)
+//     res.redirect('/list')
+// })
+
+// // 글 삭제 기능
+// app.get('/delete/:id', async (req, res) => {
+//   try {
+//     await db.collection('post').deleteOne({ _id: new ObjectId(req.params.id), user : new ObjectId(req.user._id) });
+//     res.redirect('/list');
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('글 삭제 중 오류가 발생했습니다.');
+//   }
+// });
 
 // app.delete('/delete', async (req, res) => {
 //   await db.collection('post').deleteOne({

@@ -17,6 +17,12 @@
     <button type="submit">전송</button>
 </form> 
 
+<% if (currentUser && postAuthorId && currentUser._id.toString() === postAuthorId.toString()) { %>
+  <a href="/edit/<%= postId %>">수정</a>
+  <a href="/delete/<%= postId %>">삭제</a>
+<% } %>
+
+
 </body>
 </html>
 
