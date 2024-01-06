@@ -148,34 +148,65 @@ app.get('/edit/:id', async(req, res) => {
 
 })
 
-// 수정 버튼 누르고 수정할 내용 작성
-app.post('/edit/', async(req, res) => {
 
-  await db.collection('post').updateOne({ _id : new ObjectId(req.body.id), user : new ObjectId(req.user._id) },
-  { $set : { title : req.body.title , content : req.body.content }}
-  )
-    console.log(req.body)
-    res.redirect('/list')
-})
-
-// 글 삭제 기능
-app.get('/delete/:id', async (req, res) => {
+app.post('/edit/', async (req, res) => {
   try {
-    await db.collection('post').deleteOne({ _id: new ObjectId(req.params.id), user : new ObjectId(req.user._id) });
-    res.redirect('/list');
+    const postId = req.body.id;
+
+    if (!ObjectId.isValid(postId)) {
+      return res.status(404).send('잘못된 글 ID입니다.');
+    }
+
+    if (req.user && req.user._id) {
+      // req.user가 정의되어 있고, req.user._id가 존재할 때에만 실행
+      await db.collection('post').updateOne(
+        { _id: new ObjectId(postId), user: new ObjectId(req.user._id) },
+        { $set: { title: req.body.title, content: req.body.content } }
+      );
+      console.log(req.body);
+      res.redirect('/list');
+    } else {
+      res.status(401).send('로그인이 필요합니다.');
+    }
   } catch (error) {
-    console.error(error);
-    res.status(500).send('글 삭제 중 오류가 발생했습니다.');
+    console.error('/edit/에서 오류 발생:', error);
+    res.status(500).send('서버 내부 오류');
   }
 });
 
-// app.delete('/delete', async (req, res) => {
-//   await db.collection('post').deleteOne({
-//     _id : new ObjectId(req.query.docid),
-//     user : new ObjectId(req.user._id)
-//   })
-//   res.send('삭제완료')
-// })
+// 글 삭제 기능
+app.delete('/delete', async (req, res) => {
+  try {
+    const postIdToDelete = req.query.docid;
+
+    if (!ObjectId.isValid(postIdToDelete)) {
+      return res.status(404).send('잘못된 글 ID입니다.');
+    }
+
+    if (req.user && req.user._id) {
+      // req.user가 정의되어 있고, req.user._id가 존재할 때에만 실행
+      const result = await db.collection('post').deleteOne({
+        _id: new ObjectId(postIdToDelete),
+        user: new ObjectId(req.user._id),
+      });
+
+      if (result.deletedCount > 0) {
+        // 삭제가 성공하면 응답으로 삭제된 글의 ID를 보냅니다.
+        res.json({ deletedPostId: postIdToDelete, message: '삭제 완료' });
+      } else {
+        // 삭제가 실패한 경우
+        res.status(404).json({ message: '삭제 실패: 글이 존재하지 않거나 권한이 없습니다.' });
+      }
+    } else {
+      res.status(401).json({ message: '로그인이 필요합니다.' });
+    }
+  } catch (error) {
+    console.error('/delete에서 오류 발생:', error);
+    res.status(500).json({ message: '서버 내부 오류' });
+  }
+});
+
+
 
 // 글 목록 페이지 나누기 
 // limit(5) 맨 위에서부터 글 5개 보이게 해주세요.
@@ -287,3 +318,5 @@ app.post('/join', async (req, res) => {
 // * 글 쓰기 페이지에서 글 작성 후 전송 누르면 에러 발생 (넘어가면 글목록 비어있다고 뜸)
 // * 이미지 부분 주석처리하고 서버 돌려볼 것  
 // * 글 작성하면 제목이 제대로 뜨지 않음 (이미지 관련 코드 지우니까 제목 뜸)
+
+// * 글 작성, 수정, 삭제 되었을때 알림창 기능 추가 할 것
