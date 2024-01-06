@@ -100,7 +100,7 @@ app.get('/write', (req, res) => {
 // 글 작성 + 이미지 업로드 기능 추가
 // 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
 app.post('/newPost',  async(req, res) => {
-  // console.log(req.body)
+  console.log(req.user)
   
   // console.log(req.file.location)
 
@@ -108,7 +108,11 @@ app.post('/newPost',  async(req, res) => {
     if (req.body.title == '') {
       res.send('제목을 입력해주세요')
     } else {
-      await db.collection('post').insertOne({ title : req.body.title, content : req.body.content })
+      await db.collection('post').insertOne({ 
+        title : req.body.title, 
+        content : req.body.content, 
+        user : req.user._id,
+        username : req.user.username })
       res.redirect('/list')
     }
   } catch(e) {
