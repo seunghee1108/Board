@@ -1,160 +1,215 @@
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
+body {
+  background-color: #f0f0f0;
 }
 
+.form-box {
+  width: 300px;
+  margin: 100px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-box h4 {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.form-box input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-box button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.form-box button:hover {
+  background-color: #2980b9;
+}
+
+body {
+  background-color: #f0f0f0;
+}
+
+.join-form {
+  width: 300px;
+  margin: 100px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.join-form h4 {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.join-form input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.join-form button {
+  background-color: #27ae60;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.join-form button:hover {
+  background-color: #219653;
+}
+
+body {
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+}
+
+
 .header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
   display: flex;
-  padding: 10px;
+  justify-content: space-between;
   align-items: center;
-  background : white;
 }
 
 .header a {
-  margin: 10px;
+  text-decoration: none;
+  color: #fff;
+  margin-right: 20px;
+  font-size: 1rem;
 }
 
-.logo {
-  font-weight: bold;
-  font-size: 2rem;
+.header a:hover {
+  text-decoration: underline;
+}
+
+.header p {
+  margin: 0;
+}
+
+
+.white-bg {
+  background-color: #fff;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.list-box {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.list-box h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-box a {
+  text-decoration: none;
+  color: #333;
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.list-box a:hover {
+  text-decoration: underline;
+}
+
+.list-box p {
+  margin: 10px 0;
+}
+
+
+body {
+  background-color: #f8f9fa;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.detail-bg {
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px;
+}
+
+.detail-bg h4 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.detail-bg p {
+  color: #555555;
+  line-height: 1.6;
+}
+
+.detail-bg hr {
+  border: 1px solid #dddddd;
+  margin-top: 20px;
+}
+
+.detail-bg div {
+  margin-top: 20px;
+}
+
+.detail-bg  {
+  color: #007bff;
+}
+
+.detail-bg form {
+  margin-top: 20px;
+}
+
+.detail-bg input,
+.detail-bg button {
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.detail-bg button {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.detail-bg button:hover {
+  background-color: #0056b3;
 }
 
 
 .grey-bg {
-  background: #eee;
-}
-
-.white-bg {
-  background: white;
+  background-color:gray;
+  padding: 20px;
   margin: 20px;
   border-radius: 5px;
-}
-
-.list-box {
-  padding : 10px;
-  border-bottom: 1px solid#eee;
-}
-
-.list-box h4 {
-  font-size: 1.2rem;
-  margin: 5px;
-}
-
-.list-box p {
-  font-size: 1rem;
-  margin: 5px;
-  color: grey;
-}
-
-input,div {
-  box-sizing: border-box;
-}
-
-.form-box {
-  background : #eee;
-  padding : 25px;
-  margin: 20px;
-  border-radius: 8px;
-}
-
-.form-box h4 {
-  font-size: 1.5rem;
-}
-
-.form-box input {
-  padding : 10px;
-  font-size: 1rem;
-  width: 100%;
-  height: 20vh;
-  border: 1px solid black;
-  border-radius: 5px;
-  margin: 10px;
-}
-.form-box .input-title {
-  width: 200px; /* 예시로 너비를 200px로 설정 */
-  height: 10px;
-  margin-bottom: 10px;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-}
-
-/* 스타일 충돌 발생 */
-.form-box .input-content {
-  width: 100%; /* 예시로 전체 너비로 설정 */
-  height: 40px;
-  margin-bottom: 10px;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-}
-
-.form-box button {
-  padding: 10px;
-  border : none;
-  background : lightgrey;
-  border-radius: 5px;
-  margin: 10px;
-}
-
-.detail-bg {
-  background: white;
-  padding: 15px;
-  margin-top: 10px;
-}
-
-.form-title {
-  height: 40vh;
-}
-
-.join-form {
-  background : #eee;
-  padding : 25px;
-  margin: 20px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-}
-
-.join-form input {
-  padding : 10px;
-  font-size: 1rem;
-  width: 40vw;
-  height: 10vh;
-  border: 1px solid black;
-  border-radius: 5px;
-  margin: 10px;
-}
-
-.join-form .input-username {
-  width: 40vw; /* 예시로 너비를 200px로 설정 */
-  height: 10vh;
-  margin-bottom: 10px;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-}
-
-/* 스타일 충돌 발생 */
-.join-form .input-password {
-  width: 40vw; /* 예시로 전체 너비로 설정 */
-  height: 40vh;
-  margin-bottom: 10px;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-}
-
-.join-form button {
-  width: 40vw;
-  padding: 10px;
-  border : none;
-  background : lightgrey;
-  border-radius: 5px;
-  margin: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
