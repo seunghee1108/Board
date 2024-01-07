@@ -103,22 +103,41 @@ app.post('/newPost',  async(req, res) => {
   console.log(req.user)
   
   // console.log(req.file.location)
-
   try {
-    if (req.body.title == '') {
-      res.send('제목을 입력해주세요')
+    if (!req.user || !req.user._id) {
+      res.status(401).send('로그인이 필요합니다.');
+    } else if (req.body.title === '') {
+      res.send('제목을 입력해주세요');
     } else {
       await db.collection('post').insertOne({ 
-        title : req.body.title, 
-        content : req.body.content, 
-        user : req.user._id,
-        username : req.user.username })
-      res.redirect('/list')
+        title: req.body.title, 
+        content: req.body.content, 
+        user: new ObjectId(req.user._id),
+        username: req.user.username 
+      });
+      res.redirect('/list');
     }
-  } catch(e) {
-    console.log(e);
-    res.status.send('서버 에러')
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('서버 에러');
   }
+  
+
+//   try {
+//     if (req.body.title == '') {
+//       res.send('제목을 입력해주세요')
+//     } else {
+//       await db.collection('post').insertOne({ 
+//         title : req.body.title, 
+//         content : req.body.content, 
+//         user : req.user._id,
+//         username : req.user.username })
+//       res.redirect('/list')
+//     }
+//   } catch(e) {
+//     console.log(e);
+//     res.status.send('서버 에러')
+//   }
 });
 
 
