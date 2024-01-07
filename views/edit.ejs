@@ -6,17 +6,14 @@
   <title>Edit Post</title>
   <link rel="stylesheet" href="main.css">
 </head>
-<body class="grey-bg">
+  <body class="grey-bg">
   
-  <%- include('header.ejs') %>
-q
-  <form class="form-box" action="/edit" method="POST">
-    <h4>수정</h4>
-    <input name="id" value="<%= result._id %>" style="display: none;">
-    <input name="title" value="<%= result.title %>">
-    <input name="content" value="<%= result.content %>">
-    <button type="submit">전송</button>
-  </form>
-
-</body>
+    <%- include('header.ejs') %>
+    <form class="form-box" action="/edit/<%= result._id %>" method="POST">
+      <h4>수정</h4>
+      <input name="title" value="<%= result.title %>">
+      <input name="content" value="<%= result.content %>">
+      <button type="submit">전송</button>
+    </form>
+  </body>
 </html>
