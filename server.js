@@ -8,6 +8,9 @@ const { ObjectId } = require('mongodb')
 
 app.use(express.static(__dirname + '/public'));
 
+// app.use(express.static('public'));
+
+
 app.set('view engine', 'ejs')
 
 // req.body 쓰기 위해 필요
