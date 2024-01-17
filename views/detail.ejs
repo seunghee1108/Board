@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="main.css">
-</head>
-<body class="grey-bg">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/public/main.css" />
+  </head>
+  <body class="grey-bg">
 
-  <%- include('header.ejs') %>
+    <%- include('header.ejs') %>
 
+<<<<<<< HEAD
   <div class="grey-bg">
     <h4><%= result.title %></h4>
     <p><%= result.content %></p>
     <hr style="margin-top: 60px">
+=======
+    <div class="detail-bg">
+      <h4><%= result.title %></h4>
+      <p><%= result.content %></p>
+      <hr style="margin-top: 60px" />
 
-    <div>
-      <% for (let i = 0; i < result2.length; i++) { %>
-        <p><strong><%= result2[i].writer %></strong> <%= result2[i].content %></p>
-     <% } %> 
+      <div>
+        <% for (let i = 0; i < result2.length; i++) { %>
+        <p>
+          <strong><%= result2[i].writer %></strong> <%= result2[i].content %>
+        </p>
+        <% } %>
+      </div>
+
+      <form class="comment-form" action="/comment" method="POST">
+        <input name="content" />
+        <input
+          name="parentId"
+          value="<%= result._id %>"
+          style="display: none"
+        />
+        <button type="submit">댓글작성</button>
+      </form>
+>>>>>>> css/issue13-1
+
     </div>
+<<<<<<< HEAD
 
     <form action="/comment" method="POST">
       <input name="content">
@@ -35,5 +57,7 @@
   </div> 
 
 </body>
+=======
+  </body>
+>>>>>>> css/issue13-1
 </html>
-
