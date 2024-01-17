@@ -10,7 +10,7 @@
 
   <%- include('header.ejs') %>
 
-  <div class="detail-bg">
+  <div class="grey-bg">
     <h4><%= result.title %></h4>
     <p><%= result.content %></p>
     <hr style="margin-top: 60px">
@@ -21,12 +21,17 @@
      <% } %> 
     </div>
 
-    
     <form action="/comment" method="POST">
       <input name="content">
       <input name="parentId" value="<%= result._id %>" style="display: none">
       <button type="submit">댓글작성</button>
     </form>
+<!--     
+    <form action="/comment" method="POST">
+      <input name="content">
+      <input name="parentId" value="<%= result._id %>" style="display: none">
+      <button type="submit">댓글작성</button>
+    </form> -->
   </div> 
 
 </body>

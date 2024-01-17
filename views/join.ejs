@@ -10,13 +10,16 @@
 
   <%- include('header.ejs') %>
 
+
   <form class="join-form" action="/join" method="POST">
-    <h4>가입</h4>
-    <input name="username" placeholder="ID">
+    <h4>Join</h4>
+    <input name="username" placeholder="Username">
     <input name="password" type="password" placeholder="비밀번호">
     <input name="passwordCheck" type="password" placeholder="비밀번호 확인">
-    <input name="email" type="email" placeholder="이메일">
-    <button type="submit">전송</button>
+    <input name="email" type="email" placeholder="Email">
+    <button type="submit">Submit</button>
   </form>
+
 </body>  
+
 </html>

@@ -179,7 +179,11 @@ body {
   margin-top: 20px;
 }
 
+<<<<<<< HEAD
 .detail-bg  {
+=======
+.detail-bg strong {
+>>>>>>> css/issue13
   color: #007bff;
 }
 
