@@ -75,10 +75,6 @@ app.get('/', (req, res) => {
   res.render('main'); // render 메서드를 사용하여 index.ejs를 렌더링
 });
 
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '/index.html')
-// })
-
 // DB에 잘 저장되는지 test
 app.get('/test', (req, res) => {
   // data : collection name 
@@ -130,54 +126,8 @@ app.post('/newPost',  async(req, res) => {
     console.error(e);
     res.status(500).send('서버 에러');
   }
-  
-
-//   try {
-//     if (req.body.title == '') {
-//       res.send('제목을 입력해주세요')
-//     } else {
-//       await db.collection('post').insertOne({ 
-//         title : req.body.title, 
-//         content : req.body.content, 
-//         user : req.user._id,
-//         username : req.user.username })
-//       res.redirect('/list')
-//     }
-//   } catch(e) {
-//     console.log(e);
-//     res.status.send('서버 에러')
-//   }
 });
 
-
-// app.get('/detail/:id', async(req, res) => {
-//   const postId = req.params.id;
-
-//   if (!ObjectId.isValid(postId)) {
-//     return res.status(404).send('Invalid post ID');
-//   }
-
-//   const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
-  
-//   if (!result) {
-//     return res.status(404).send('Post not found');
-//   }
-
-//   res.render('detail.ejs', { result: result });
-// });
-
-
-// app.get('/detail/:id', async(req, res) => {
-//   try {
-//     const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
-//     console.log(req.params)
-//     res.render('detail.ejs' ,{ result : result })
-
-//   } catch(e) {
-//     console.log(e);
-//     res.status(400).send('으에')
-//   }
-// })
 
 app.get('/detail/:id', async (req, res) => {
   try {
@@ -336,24 +286,33 @@ passport.deserializeUser(async (user, done) => {
 
 
 // 로그인 기능
-app.get('/login', async (req, res) => {
-  console.log(req.user)
-  res.render('login.ejs')
-})
-
-// app.post('/login', async (req, res, next) => {
-
-//   passport.authenticate('local', (error, user, info) => { 
-//     if(error) return res.status(500).json(error)
-//     if(!user) return res.status(401).json(info.message)
-//     req.logIn(user, (err) => {
-//       if(err) return next(err)
-//       res.redirect('/index.ejs')
-//    })
-//   })(req, res, next)
-
+// app.get('/login', async (req, res) => {
+//   console.log(req.user)
+//   res.render('login.ejs')
 // })
 
+// app.post('/login', async (req, res, next) => {
+//   passport.authenticate('local', (error, user, info) => { 
+//     if (error) return res.status(500).json(error);
+//     if (!user) return res.status(401).json(info.message);
+
+//     req.logIn(user, (err) => {
+//       if (err) return next(err); 
+
+//       // 로그인 성공시에는 원하는 작업을 수행하고 리다이렉트
+//       console.log(`User ${user.username} logged in successfully.`);
+//       return res.redirect('/');  // 메인페이지로 이동
+//     });
+//   })(req, res, next);
+// });
+
+
+// 로그인 페이지 라우트
+app.get('/login', async (req, res) => {
+  res.render('login.ejs', { user: req.user }); // 사용자 정보를 템플릿에 전달
+});
+
+// 로그인 처리 라우트
 app.post('/login', async (req, res, next) => {
   passport.authenticate('local', (error, user, info) => { 
     if (error) return res.status(500).json(error);
@@ -364,10 +323,11 @@ app.post('/login', async (req, res, next) => {
 
       // 로그인 성공시에는 원하는 작업을 수행하고 리다이렉트
       console.log(`User ${user.username} logged in successfully.`);
-      return res.redirect('/');  // 메인페이지로 이동
+      return res.redirect('/');
     });
   })(req, res, next);
 });
+
 
 
 // 가입 기능
