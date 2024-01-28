@@ -243,37 +243,50 @@ app.post('/edit/', async (req, res) => {
   }
 });
 
-// 글 삭제 기능
-app.delete('/delete', async (req, res) => {
+
+app.get('/delete/:id', async (req, res) => {
   try {
-    const postIdToDelete = req.query.docid;
-
-    if (!ObjectId.isValid(postIdToDelete)) {
-      return res.status(404).send('잘못된 글 ID입니다.');
-    }
-
-    if (req.user && req.user._id) {
-      // req.user가 정의되어 있고, req.user._id가 존재할 때에만 실행
-      const result = await db.collection('post').deleteOne({
-        _id: new ObjectId(postIdToDelete),
-        user: new ObjectId(req.user._id),
-      });
-
-      if (result.deletedCount > 0) {
-        // 삭제가 성공하면 응답으로 삭제된 글의 ID를 보냅니다.
-        res.json({ deletedPostId: postIdToDelete, message: '삭제 완료' });
-      } else {
-        // 삭제가 실패한 경우
-        res.status(404).json({ message: '삭제 실패: 글이 존재하지 않거나 권한이 없습니다.' });
-      }
-    } else {
-      res.status(401).json({ message: '로그인이 필요합니다.' });
-    }
+    await db.collection('post').deleteOne({ _id: new ObjectId(req.params.id) });
+    res.redirect('/list');
   } catch (error) {
-    console.error('/delete에서 오류 발생:', error);
-    res.status(500).json({ message: '서버 내부 오류' });
+    console.error(error);
+    res.status(500).send('글 삭제 중 오류가 발생했습니다.');
   }
 });
+
+
+
+// 글 삭제 기능
+// app.delete('/delete', async (req, res) => {
+//   try {
+//     const postIdToDelete = req.query.docid;
+
+//     if (!ObjectId.isValid(postIdToDelete)) {
+//       return res.status(404).send('잘못된 글 ID입니다.');
+//     }
+
+//     if (req.user && req.user._id) {
+//       // req.user가 정의되어 있고, req.user._id가 존재할 때에만 실행
+//       const result = await db.collection('post').deleteOne({
+//         _id: new ObjectId(postIdToDelete),
+//         user: new ObjectId(req.user._id),
+//       });
+
+//       if (result.deletedCount > 0) {
+//         // 삭제가 성공하면 응답으로 삭제된 글의 ID를 보냅니다.
+//         res.json({ deletedPostId: postIdToDelete, message: '삭제 완료' });
+//       } else {
+//         // 삭제가 실패한 경우
+//         res.status(404).json({ message: '삭제 실패: 글이 존재하지 않거나 권한이 없습니다.' });
+//       }
+//     } else {
+//       res.status(401).json({ message: '로그인이 필요합니다.' });
+//     }
+//   } catch (error) {
+//     console.error('/delete에서 오류 발생:', error);
+//     res.status(500).json({ message: '서버 내부 오류' });
+//   }
+// });
 
 
 // 글 목록 페이지 나누기 
