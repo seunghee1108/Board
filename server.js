@@ -31,6 +31,8 @@ app.use(session({
 
 app.use(passport.session()) 
 
+
+
 // iam 계정 액세스 키
 // * IAM bucket 새로 만들어야 됨
 // const { S3Client } = require('@aws-sdk/client-s3')
@@ -286,10 +288,16 @@ passport.deserializeUser(async (user, done) => {
 
 
 // 로그인 기능
+// app.get('/login', async (req, res) => {
+//   console.log(req.user)
+//   res.render('login.ejs')
+// })
+
+
 app.get('/login', async (req, res) => {
-  console.log(req.user)
-  res.render('login.ejs')
-})
+  // 사용자 정보를 템플릿으로 전달
+  res.render('login.ejs', { user: req.user });
+});
 
 app.post('/login', async (req, res, next) => {
   passport.authenticate('local', (error, user, info) => { 
@@ -306,16 +314,21 @@ app.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
+
+
+
+// 로그아웃 기능 
 app.get('/logout', (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      console.error('Error logging out:', err);
-      return next(err);
-    }
+  req.logout(() => {
     res.redirect('/'); // 로그아웃 후에는 메인 페이지로 리다이렉트합니다.
   });
 });
 
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated(); // Passport에서 제공하는 isAuthenticated() 함수를 사용하여 로그인 여부 확인
+  res.locals.user = req.user; // 현재 사용자 정보를 템플릿에 전달
+  next();
+});
 
 // 가입 기능
 app.get('/join', (req, res) => {
