@@ -5,6 +5,125 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
   <link rel="stylesheet" href="/public/main.css" />
+  <style>
+  /* body {
+    background-color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .header {
+    margin-bottom: 5vh;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header a {
+    text-decoration: none;
+    color: #fff;
+    margin-right: 20px;
+    font-size: 1rem;
+  }  
+  .header p {
+    margin: 0;
+  } */
+  
+
+  body {
+  background-color: #f0f0f0;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  margin-bottom: 20px; /* 더 많은 여백을 줍니다. */
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header a {
+  text-decoration: none;
+  color: #fff;
+  margin-right: 20px;
+  font-size: 1rem;
+}
+
+.header a:hover {
+  text-decoration: underline; /* 호버 시 언더라인이 표시됩니다. */
+}
+
+.header p {
+  margin: 0;
+}
+
+.detail-bg {
+  background-color: #fff;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.detail-bg h4 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.detail-bg p {
+  margin-bottom: 15px;
+}
+
+.button-group {
+  margin-top: 20px;
+}
+
+.button-group a {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.button-group a:last-child {
+  margin-right: 0;
+}
+
+.button-group a:hover {
+  background-color: #1e87d8;
+}
+
+.comment-form input[name="content"] {
+  width: 80%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.comment-form button[type="submit"] {
+  padding: 8px 16px;
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+  </style>
 </head>
 <body class="grey-bg">
 
@@ -13,8 +132,13 @@
 <div class="detail-bg">
   <h4><%= result.title %></h4>
   <p><%= result.content %></p>
+  <!-- 수정 및 삭제 버튼 추가 -->
+  <div class="button-group">
+    <a href="/edit/<%= result._id %>">수정</a>
+    <a href="/delete/<%= result._id %>">삭제</a>
+  </div>
+  
   <hr style="margin-top: 60px" />
-
   <div>
     <% for (let i = 0; i < result2.length; i++) { %>
       <p>
@@ -23,11 +147,6 @@
     <% } %>
   </div>
 
-  <!-- 수정 및 삭제 버튼 추가 -->
-  <div class="button-group">
-    <a href="/edit/<%= result._id %>">수정</a>
-    <a href="/delete/<%= result._id %>">삭제</a>
-  </div>
 
   <!-- 댓글 작성 폼 -->
   <form class="comment-form" action="/comment" method="POST">
