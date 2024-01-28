@@ -1,90 +1,12 @@
 body {
   background-color: #f0f0f0;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
 }
-
-.form-box {
-  width: 300px;
-  margin: 100px auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.form-box h4 {
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.form-box input {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.form-box button {
-  background-color: #3498db;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-}
-
-.form-box button:hover {
-  background-color: #2980b9;
-}
-
-body {
-  background-color: #f0f0f0;
-}
-
-.join-form {
-  width: 300px;
-  margin: 100px auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.join-form h4 {
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.join-form input {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.join-form button {
-  background-color: #27ae60;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-}
-
-.join-form button:hover {
-  background-color: #219653;
-}
-
-body {
-  background-color: #f0f0f0;
-  font-family: Arial, sans-serif;
-}
-
 
 .header {
+  margin-bottom: 5vh;
   background-color: #333;
   color: #fff;
   padding: 10px 20px;
@@ -100,16 +22,250 @@ body {
   font-size: 1rem;
 }
 
-.header a:hover {
-  text-decoration: underline;
-}
+/* .header a:hover {
+
+} */
 
 .header p {
   margin: 0;
 }
 
+.grey-bg {
+  background-color: whitesmoke;
+  /* padding: 20px; */
+  /* margin: 20px; */
+  border-radius: 5px;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+/* 글쓰기 form */
+.form-box {
+  width: 60vw;
+  height: auto;
+  background-color: hsl(0, 0%, 100%);
+  padding: 3vw;
+  margin: auto;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.form-box h4 {
+  font-size: 1.5rem;
+  margin-bottom: 3vw;
+  text-align: center;
+}
+
+.form-box input,
+.form-box button {
+  width: calc(100% - 2vw);
+  margin-bottom: 1vw;
+  padding: 1vw;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-box button {
+  width: 20%;
+  background-color: #3498db;
+  color: #fff;
+  padding: 1vw 2vw;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 5vh;
+  margin-top: 2vw;
+}
+
+.input-title,
+.input-content {
+  width: calc(100% - 2vw);
+  padding: 1vw;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.input-title {
+  height: 2vh;
+}
+
+.input-content {
+  height: 30vh;
+}
+
+
+.form-box button:hover {
+  background-color: #2980b9;
+}
+
+/* 회원가입 form */
+.join-form {
+  width: 50vw;
+  height: auto;
+  padding: 3vw;
+  margin:auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.join-form h4 {
+  font-size: 1.5rem;
+  margin-bottom: 3vw;
+}
+
+.join-form input {
+  width: calc(100% - 2vw);
+  margin-bottom: 2vw;
+  padding: 1vw;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.join-form button {
+  width : 100%;
+  background-color: #27ae60;
+  color: #fff;
+  padding: 1vw 2vw;
+  height: 4vh;
+  margin-top: 2vw; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.join-form button:hover {
+  background-color: #219653;
+}
+
+/* 로그인 form */
+.login-form {
+  width: 30vw;
+  height: auto;
+  padding: 3vw;
+  margin:auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-form h4 {
+  font-size: 1.5rem;
+  margin-bottom: 3vw;
+}
+
+.login-form input {
+  width: calc(100% - 2vw);
+  margin-bottom: 2vw;
+  padding: 1vw;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.login-form button {
+  width : 100%;
+  background-color: #27ae60;
+  color: #fff;
+  padding: 1vw 2vw;
+  height: 4vh;
+  margin-top: 2vw; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #219653;
+}
+
+
+
+
+/* 글목록  */
+
+/* 글 목록을 담는 컨테이너 */
+.white-bg {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  width: 80%;
+}
+/* 
+.list-box {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.list-box h2 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.list-box a {
+  text-decoration: none;
+  color: #3498db; */
+  /* margin-right: 10px; */
+/* } */
+
+/* 
 
 .white-bg {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 개별 글 목록 항목 */
+.list-box {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+} */
+
+.list-box h2 {
+  margin-bottom: 5px;
+}
+
+.list-box h2 a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* 수정 및 삭제 링크 스타일링 */
+.list-box a {
+  margin-left: 10px;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.list-box a:hover {
+  color: #333;
+}
+
+/* 다음 페이지 링크 스타일링 */
+.next-page-link {
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.next-page-link a {
+  text-decoration: none;
+  color: #3498db;
+}
+
+.next-page-link a:hover {
+  text-decoration: underline;
+}
+
+/* .white-bg {
   background-color: #fff;
   padding: 20px;
   margin: 20px;
@@ -145,13 +301,6 @@ body {
 }
 
 
-body {
-  background-color: #f8f9fa;
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
 .detail-bg {
   background-color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -179,7 +328,7 @@ body {
   margin-top: 20px;
 }
 
-.detail-bg  {
+.detail-bg strong {
   color: #007bff;
 }
 
@@ -204,12 +353,42 @@ body {
 .detail-bg button:hover {
   background-color: #0056b3;
 }
+ */
 
-
-.grey-bg {
-  background-color:gray;
+ .detail-bg {
   padding: 20px;
-  margin: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.detail-bg h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.detail-bg p {
+  margin-bottom: 20px;
+}
+
+.comments {
+  margin-bottom: 20px;
+}
+
+.comment {
+  margin-bottom: 10px;
+}
+
+.button-group {
+  margin-bottom: 20px;
+}
+
+.button-group .button {
+  margin-right: 10px;
+}
+
+.comment-form input {
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.comment-form button {
+  padding: 5px 10px;
 }
