@@ -1,10 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/public/main.css">
+</head>
+<body class="grey-bg">
+
+  <%- include('header.ejs') %>
+
+  <div class="detail-bg">
+    <h2><%= result.title %></h2>
+    <p><%= result.content %></p>
+    <hr />
+
+    <div class="comments">
+      <% for (let i = 0; i < result2.length; i++) { %>
+        <div class="comment">
+          <p>
+            <strong><%= result2[i].writer %></strong> <%= result2[i].content %>
+          </p>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- <div class="button-group">
+      <a href="/edit/<%= result._id %>" class="button">수정</a>
+      <a href="/delete/<%= result._id %>" class="button">삭제</a>
+    </div> -->
+
+    <form class="comment-form" action="/comment" method="POST">
+      <input name="content" placeholder="댓글을 입력하세요" />
+      <input name="parentId" value="<%= result._id %>" style="display: none" />
+      <button type="submit">댓글작성</button>
+    </form>
+  </div>
+
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/public/main.css" />
+  <link rel="stylesheet" href="main.css">
+
   </head>
   <body class="grey-bg">
 
@@ -21,6 +64,7 @@
           <strong><%= result2[i].writer %></strong> <%= result2[i].content %>
         </p>
         <% } %>
+        
       </div>
 
       <form class="comment-form" action="/comment" method="POST">
@@ -46,7 +90,8 @@
       <input name="parentId" value="<%= result._id %>" style="display: none">
       <button type="submit">댓글작성</button>
     </form> -->
-  </div> 
-
+  <!-- </div>  -->
+<!-- 
 </body>
-</html>
+</html> -->
+-->

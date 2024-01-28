@@ -1,39 +1,21 @@
-<!-- login.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>Document</title>
   <link rel="stylesheet" href="main.css">
+  <script src="/client.js"></script> <!-- 이 부분에 위치시킵니다 -->
 </head>
-<body class="grey-bg">
+  <body class="grey-bg"></body>
+  <%- include('header.ejs') %>
 
-  <% include('header.ejs') %>
-
-  <form class="form-box" action="/login" method="POST">
-    <h4>Login</h4>
-    <input name="username" placeholder="Username">
-    <input name="password" type="password" placeholder="Password">
-    <button type="submit">Submit</button>
-  </form>
-
-  <a href="/login" class="login-link">Login</a>
-
-  <% if (user) { %>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const logoutLink = document.createElement('a');
-        logoutLink.href = '/logout';
-        logoutLink.textContent = 'Logout';
-  
-        const loginLink = document.querySelector('.login-link');
-        if (loginLink) {
-          loginLink.style.display = 'none';
-          document.querySelector('.header-container').appendChild(logoutLink);
-        }
-      });
-    </script>
+<form class="login-form" action="/login" method="POST">
+  <h4>Login</h4>
+  <input name="username" placeholder="Username">
+  <input name="password" type="password" placeholder="Password">
+  <button type="submit">Submit</button>
+</form>
 
 </body>
 </html>
