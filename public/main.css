@@ -241,7 +241,7 @@ body {
 /* 수정 및 삭제 링크 스타일링 */
 .list-box a {
   margin-left: 10px;
-  font-size: 0.8rem;
+  font-size: 1.2ㄴrem;
   color: #888;
 }
 
