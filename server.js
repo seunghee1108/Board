@@ -76,17 +76,56 @@ app.get('/', (req, res) => {
 //   res.sendFile(__dirname + '/index.html')
 // })
 
-// DB에 잘 저장되는지 test
-app.get('/test', (req, res) => {
-  // data : collection name 
-  db.collection('post').insertOne({title : '테스트'})
-  .then(result => {
+
+
+app.get('/test', async (req, res) => {
+  try {
+    // 현재 시간을 생성하여 createdAt 필드에 저장
+    const currentDate = new Date();
+    await db.collection('post').insertOne({ title: '테스트', createdAt: currentDate });
     res.send('테스트 데이터 삽입 성공');
-})
-.catch(error => {
+  } catch (error) {
+    console.error(error);
     res.status(500).send('테스트 데이터 삽입 실패');
+  }
 });
-})
+
+// 글 작성 + 이미지 업로드 기능 추가
+app.post('/newPost', async (req, res) => {
+  try {
+    if (!req.user || !req.user._id) {
+      res.status(401).send('로그인이 필요합니다.');
+    } else if (req.body.title === '') {
+      res.send('제목을 입력해주세요');
+    } else {
+      // 현재 시간을 생성하여 createdAt 필드에 저장
+      const currentDate = new Date();
+      await db.collection('post').insertOne({ 
+        title: req.body.title, 
+        content: req.body.content, 
+        user: new ObjectId(req.user._id),
+        username: req.user.username,
+        createdAt: currentDate  // 작성한 날짜를 저장
+      });
+      res.redirect('/list');
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('서버 에러');
+  }
+});
+
+// DB에 잘 저장되는지 test
+// app.get('/test', (req, res) => {
+//   // data : collection name 
+//   db.collection('post').insertOne({title : '테스트'})
+//   .then(result => {
+//     res.send('테스트 데이터 삽입 성공');
+// })
+// .catch(error => {
+//     res.status(500).send('테스트 데이터 삽입 실패');
+// });
+// })
 
 app.get('/list', async (req, res) => {
   try {
@@ -105,33 +144,33 @@ app.get('/write', (req, res) => {
 
 // 글 작성 + 이미지 업로드 기능 추가
 // 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
-app.post('/newPost',  async(req, res) => {
-  console.log(req.user)
+// app.post('/newPost',  async(req, res) => {
+//   console.log(req.user)
   
-  // console.log(req.file.location)
-  try {
-    if (!req.user || !req.user._id) {
-      res.status(401).send('로그인이 필요합니다.');
-    } else if (req.body.title === '') {
-      res.send('제목을 입력해주세요');
-    } else {
-      await db.collection('post').insertOne({ 
-        title: req.body.title, 
-        content: req.body.content, 
-        user: new ObjectId(req.user._id),
-        username: req.user.username 
-      });
-      res.redirect('/list');
-    }
-  } catch (e) {
-    console.error(e);
-    res.status(500).send('서버 에러');
-  }
+//   // console.log(req.file.location)
+//   try {
+//     if (!req.user || !req.user._id) {
+//       res.status(401).send('로그인이 필요합니다.');
+//     } else if (req.body.title === '') {
+//       res.send('제목을 입력해주세요');
+//     } else {
+//       await db.collection('post').insertOne({ 
+//         title: req.body.title, 
+//         content: req.body.content, 
+//         user: new ObjectId(req.user._id),
+//         username: req.user.username 
+//       });
+//       res.redirect('/list');
+//     }
+//   } catch (e) {
+//     console.error(e);
+//     res.status(500).send('서버 에러');
+//   }
   
 
 //   try {
 //     if (req.body.title == '') {
-//       res.send('제목을 입력해주세요')
+//       res.send('제목을 입력해주세요')s
 //     } else {
 //       await db.collection('post').insertOne({ 
 //         title : req.body.title, 
@@ -144,37 +183,7 @@ app.post('/newPost',  async(req, res) => {
 //     console.log(e);
 //     res.status.send('서버 에러')
 //   }
-});
-
-
-// app.get('/detail/:id', async(req, res) => {
-//   const postId = req.params.id;
-
-//   if (!ObjectId.isValid(postId)) {
-//     return res.status(404).send('Invalid post ID');
-//   }
-
-//   const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
-  
-//   if (!result) {
-//     return res.status(404).send('Post not found');
-//   }
-
-//   res.render('detail.ejs', { result: result });
 // });
-
-
-// app.get('/detail/:id', async(req, res) => {
-//   try {
-//     const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
-//     console.log(req.params)
-//     res.render('detail.ejs' ,{ result : result })
-
-//   } catch(e) {
-//     console.log(e);
-//     res.status(400).send('으에')
-//   }
-// })
 
 app.get('/detail/:id', async (req, res) => {
   try {
@@ -201,7 +210,6 @@ app.get('/detail/:id', async (req, res) => {
 });
 
 
-
 // 글 수정 기능
 app.get('/edit/:id', async(req, res) => {
 
@@ -214,7 +222,6 @@ app.get('/edit/:id', async(req, res) => {
   const result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
   console.log(result)
   res.render('edit.ejs', { result : result })
-
 })
 
 
@@ -254,41 +261,6 @@ app.get('/delete/:id', async (req, res) => {
   }
 });
 
-
-
-// 글 삭제 기능
-// app.delete('/delete', async (req, res) => {
-//   try {
-//     const postIdToDelete = req.query.docid;
-
-//     if (!ObjectId.isValid(postIdToDelete)) {
-//       return res.status(404).send('잘못된 글 ID입니다.');
-//     }
-
-//     if (req.user && req.user._id) {
-//       // req.user가 정의되어 있고, req.user._id가 존재할 때에만 실행
-//       const result = await db.collection('post').deleteOne({
-//         _id: new ObjectId(postIdToDelete),
-//         user: new ObjectId(req.user._id),
-//       });
-
-//       if (result.deletedCount > 0) {
-//         // 삭제가 성공하면 응답으로 삭제된 글의 ID를 보냅니다.
-//         res.json({ deletedPostId: postIdToDelete, message: '삭제 완료' });
-//       } else {
-//         // 삭제가 실패한 경우
-//         res.status(404).json({ message: '삭제 실패: 글이 존재하지 않거나 권한이 없습니다.' });
-//       }
-//     } else {
-//       res.status(401).json({ message: '로그인이 필요합니다.' });
-//     }
-//   } catch (error) {
-//     console.error('/delete에서 오류 발생:', error);
-//     res.status(500).json({ message: '서버 내부 오류' });
-//   }
-// });
-
-
 // 글 목록 페이지 나누기 
 // limit(5) 맨 위에서부터 글 5개 보이게 해주세요.
 // skip(5) 위에서 5개 건너뛰고 5개만 가져오세요.
@@ -299,8 +271,6 @@ app.get('/list/:id', async(req, res) => {
 
 app.get('/list/next/:id', async (req, res) => {
   try {
-    console.log('Received parameter value:', req.params.id);
-
     // 클라이언트에서 전달된 id 값이 ObjectId 형식인지 확인
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(400).send('Invalid ObjectId format');
@@ -308,13 +278,18 @@ app.get('/list/next/:id', async (req, res) => {
 
     const lastPostId = new ObjectId(req.params.id);
 
+    // DB에서 해당 ID보다 큰 게시물을 올바르게 검색
     const result = await db.collection('post').find({ _id: { $gt: lastPostId } }).limit(5).toArray();
+
+    // 클라이언트에게 올바른 데이터를 렌더링
     res.render('list.ejs', { 글목록: result });
   } catch (error) {
     console.error('Error in /list/next/:id:', error);
     res.status(500).send('Internal Server Error');
   }
 });
+
+
 
 // 제출한 id, pw가 db랑 일치하는지 검사 
 passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
@@ -344,7 +319,6 @@ passport.deserializeUser(async (user, done) => {
   })
 })
 
-
 // 로그인 기능
 app.get('/login', async (req, res) => {
   console.log(req.user)
@@ -352,17 +326,20 @@ app.get('/login', async (req, res) => {
 })
 
 // app.post('/login', async (req, res, next) => {
-
 //   passport.authenticate('local', (error, user, info) => { 
-//     if(error) return res.status(500).json(error)
-//     if(!user) return res.status(401).json(info.message)
-//     req.logIn(user, (err) => {
-//       if(err) return next(err)
-//       res.redirect('/index.ejs')
-//    })
-//   })(req, res, next)
+//     if (error) return res.status(500).json(error);
+//     if (!user) return res.status(401).json(info.message);
 
-// })
+//     req.logIn(user, (err) => {
+//       if (err) return next(err); 
+
+//             res.render('main.ejs', { user: user });
+//       // 로그인 성공 시 메인 페이지로 리디렉션
+//       // res.redirect('/');
+//     });
+//   })(req, res, next);
+// });
+
 
 app.post('/login', async (req, res, next) => {
   passport.authenticate('local', (error, user, info) => { 
@@ -372,13 +349,54 @@ app.post('/login', async (req, res, next) => {
     req.logIn(user, (err) => {
       if (err) return next(err); 
 
-      // 로그인 성공시에는 원하는 작업을 수행하고 리다이렉트
-      console.log(`User ${user.username} logged in successfully.`);
-      return res.redirect('/');  // 메인페이지로 이동
+      // 로그인 성공 시 메인 페이지로 리디렉션
+      res.redirect('/'); 
     });
   })(req, res, next);
 });
 
+app.get('/', (req, res) => {
+  // 메인 페이지 렌더링 시에 사용자 정보를 전달하지 않음
+  res.render('main'); 
+});
+
+
+// app.post('/login', async (req, res, next) => {
+//   passport.authenticate('local', (error, user, info) => { 
+//     if (error) return res.status(500).json(error);
+//     if (!user) return res.status(401).json(info.message);
+
+//     req.logIn(user, (err) => {
+//       if (err) return next(err); 
+
+//       // 로그인 성공 시 사용자 정보를 템플릿으로 전달
+//       res.render('main.ejs', { user: user });
+//       res.render('login.ejs', { user: user });
+//     });
+//   })(req, res, next);
+// });
+
+
+
+// app.post('/login', async (req, res, next) => {
+//   passport.authenticate('local', (error, user, info) => { 
+//     if (error) return res.status(500).json(error);
+//     if (!user) return res.status(401).json(info.message);
+
+//     req.logIn(user, (err) => {
+//       if (err) return next(err); 
+
+//       // 로그인 성공시에는 원하는 작업을 수행하고 리다이렉트
+//       console.log(`User ${user.username} logged in successfully.`);
+//       return res.redirect('/');  // 메인페이지로 이동
+//     });
+//   })(req, res, next);
+// });
+
+app.get('/logout', (req, res) => {
+  req.logout(); // PassportJS의 logout 메서드를 호출하여 세션에서 사용자 정보를 제거합니다.
+  res.redirect('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트합니다.
+});
 
 // 가입 기능
 app.get('/join', (req, res) => {
@@ -398,9 +416,13 @@ app.post('/join', async (req, res) => {
 app.post('/comment', async (req, res) => {
   await db.collection('comment').insertOne({ 
     content: req.body.content,
-    writerId: new ObjectId(req.user.id),
+    writerId: new ObjectId(req.user._id),
     writer: req.user.username,
     parentId: new ObjectId(req.body.parentId) // 수정: parantId -> parentId
   });
   res.redirect('back');
 });
+
+
+// 로그아웃 기능 추가
+// css 수정
