@@ -319,11 +319,79 @@ passport.deserializeUser(async (user, done) => {
   })
 })
 
+// app.js (일부분)
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// 사용자 인증 상태 확인 미들웨어
+function isAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next(); // 인증된 사용자일 경우 다음 미들웨어로 이동
+    }
+    res.redirect('/login'); // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
+}
+
+// 메인 페이지 라우트
+app.get('/', isAuthenticated, (req, res) => {
+    res.render('main', { user: req.user }); // 사용자 정보를 템플릿에 전달
+});
+
+// 로그인 페이지 라우트
+app.get('/login', (req, res) => {
+  res.render('login', { isLoggedIn: req.isAuthenticated() });
+});
+
+// // 로그아웃 라우트
+// app.get('/logout', (req, res) => {
+//     req.logout(); // PassportJS의 logout 메서드를 호출하여 세션에서 사용자 정보를 제거
+//     res.redirect('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트
+// });
+// app.post('/login', (req, res) => {
+//   // 로그인 로직을 여기에 작성합니다.
+//   const { username, password } = req.body;
+
+//   // 예시: 간단한 로그인 검증
+//   if (username === 'user' && password === 'password') {
+//       // 로그인 성공
+//       // res.send('로그인 성공!');
+//       res.redirect('/main');
+//   } else {
+//       // 로그인 실패
+//       res.send('로그인 실패: 유저명 또는 비밀번호가 잘못되었습니다.');
+//   }
+// });
+
+// app.get('/main', (req, res) => {
+//   // 이 부분에 메인 페이지를 렌더링하거나 메인 페이지의 HTML을 보내는 로직을 작성합니다.
+//   // 예시: 메인 페이지를 렌더링하는 경우
+//   res.render('main'); // 'main'은 메인 페이지의 템플릿 이름입니다. 실제로 사용하는 템플릿 이름으로 변경해야 합니다.
+// });
+
+app.post('/login', (req, res) => {
+  // 로그인 로직을 처리한 후 세션에 사용자 정보를 저장합니다.
+  req.session.isLoggedIn = true;
+  // 로그인 후 메인 페이지로 리다이렉션합니다.
+  res.redirect('/main');
+});
+
+app.get('/logout', (req, res) => {
+  // 로그아웃 요청을 처리하고 세션에서 사용자 정보를 제거합니다.
+  req.session.isLoggedIn = false;
+  // 로그아웃 후 메인 페이지로 리다이렉션합니다.
+  res.redirect('/main');
+});
+
+app.get('/main', (req, res) => {
+  // 메인 페이지에 사용자의 로그인 상태를 전달합니다.
+  res.render('main', { isLoggedIn: req.session.isLoggedIn });
+});
+
 // 로그인 기능
-app.get('/login', async (req, res) => {
-  console.log(req.user)
-  res.render('login.ejs')
-})
+// app.get('/login', async (req, res) => {
+//   console.log(req.user)
+//   res.render('login.ejs')
+// })
 
 // app.post('/login', async (req, res, next) => {
 //   passport.authenticate('local', (error, user, info) => { 
@@ -341,24 +409,24 @@ app.get('/login', async (req, res) => {
 // });
 
 
-app.post('/login', async (req, res, next) => {
-  passport.authenticate('local', (error, user, info) => { 
-    if (error) return res.status(500).json(error);
-    if (!user) return res.status(401).json(info.message);
+// app.post('/login', async (req, res, next) => {
+//   passport.authenticate('local', (error, user, info) => { 
+//     if (error) return res.status(500).json(error);
+//     if (!user) return res.status(401).json(info.message);
 
-    req.logIn(user, (err) => {
-      if (err) return next(err); 
+//     req.logIn(user, (err) => {
+//       if (err) return next(err); 
 
-      // 로그인 성공 시 메인 페이지로 리디렉션
-      res.redirect('/'); 
-    });
-  })(req, res, next);
-});
+//       // 로그인 성공 시 메인 페이지로 리디렉션
+//       res.redirect('/'); 
+//     });
+//   })(req, res, next);
+// });
 
-app.get('/', (req, res) => {
-  // 메인 페이지 렌더링 시에 사용자 정보를 전달하지 않음
-  res.render('main'); 
-});
+// app.get('/', (req, res) => {
+//   // 메인 페이지 렌더링 시에 사용자 정보를 전달하지 않음
+//   res.render('main'); 
+// });
 
 
 // app.post('/login', async (req, res, next) => {
@@ -393,24 +461,24 @@ app.get('/', (req, res) => {
 //   })(req, res, next);
 // });
 
-app.get('/logout', (req, res) => {
-  req.logout(); // PassportJS의 logout 메서드를 호출하여 세션에서 사용자 정보를 제거합니다.
-  res.redirect('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트합니다.
-});
+// app.get('/logout', (req, res) => {
+//   req.logout(); // PassportJS의 logout 메서드를 호출하여 세션에서 사용자 정보를 제거합니다.
+//   res.redirect('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트합니다.
+// });
 
-// 가입 기능
-app.get('/join', (req, res) => {
-  res.render('join.ejs')
-})
+// // 가입 기능
+// app.get('/join', (req, res) => {
+//   res.render('join.ejs')
+// })
 
-app.post('/join', async (req, res) => {
-  await db.collection('user').insertOne({ 
-    username : req.body.username,
-    password : req.body.password,
-    email : req.body.email
-  })
-  res.redirect('/')  // 메인페이지로 이동
-})
+// app.post('/join', async (req, res) => {
+//   await db.collection('user').insertOne({ 
+//     username : req.body.username,
+//     password : req.body.password,
+//     email : req.body.email
+//   })
+//   res.redirect('/')  // 메인페이지로 이동
+// })
 
 // 댓글 기능
 app.post('/comment', async (req, res) => {
