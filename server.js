@@ -6,6 +6,8 @@ const PORT = 3000;
 const { MongoClient } = require('mongodb')
 const { ObjectId } = require('mongodb') 
 
+require('dotenv').config()
+
 app.use(express.static(__dirname + '/public'));
 
 app.set('view engine', 'ejs')
@@ -23,7 +25,11 @@ app.use(session({
   secret: '암호화에 쓸 비번',
   resave : false,
   saveUninitialized : false,
-  cookie : { maxAge : 60 * 60 * 1000 }
+  cookie : { maxAge : 60 * 60 * 1000 }, 
+  // store : MongoStore.create({
+    // mongoUrl :'mongodb+srv://admin:sh123@cluster0.lfkcymr.mongodb.net/?retryWrites=true&w=majority',
+    // dbName : 'Board'
+  // })
 }))
 
 app.use(passport.session()) 
@@ -53,7 +59,7 @@ app.use(passport.session())
 // })
 
 
-let db
+let db;
 const url = 'mongodb+srv://admin:sh123@cluster0.lfkcymr.mongodb.net/?retryWrites=true&w=majority'
 
 new MongoClient(url).connect().then((client) => {
@@ -76,56 +82,17 @@ app.get('/', (req, res) => {
 //   res.sendFile(__dirname + '/index.html')
 // })
 
-
-
-app.get('/test', async (req, res) => {
-  try {
-    // 현재 시간을 생성하여 createdAt 필드에 저장
-    const currentDate = new Date();
-    await db.collection('post').insertOne({ title: '테스트', createdAt: currentDate });
-    res.send('테스트 데이터 삽입 성공');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('테스트 데이터 삽입 실패');
-  }
-});
-
-// 글 작성 + 이미지 업로드 기능 추가
-app.post('/newPost', async (req, res) => {
-  try {
-    if (!req.user || !req.user._id) {
-      res.status(401).send('로그인이 필요합니다.');
-    } else if (req.body.title === '') {
-      res.send('제목을 입력해주세요');
-    } else {
-      // 현재 시간을 생성하여 createdAt 필드에 저장
-      const currentDate = new Date();
-      await db.collection('post').insertOne({ 
-        title: req.body.title, 
-        content: req.body.content, 
-        user: new ObjectId(req.user._id),
-        username: req.user.username,
-        createdAt: currentDate  // 작성한 날짜를 저장
-      });
-      res.redirect('/list');
-    }
-  } catch (e) {
-    console.error(e);
-    res.status(500).send('서버 에러');
-  }
-});
-
 // DB에 잘 저장되는지 test
-// app.get('/test', (req, res) => {
-//   // data : collection name 
-//   db.collection('post').insertOne({title : '테스트'})
-//   .then(result => {
-//     res.send('테스트 데이터 삽입 성공');
-// })
-// .catch(error => {
-//     res.status(500).send('테스트 데이터 삽입 실패');
-// });
-// })
+app.get('/test', (req, res) => {
+  // data : collection name 
+  db.collection('post').insertOne({title : '테스트'})
+  .then(result => {
+    res.send('테스트 데이터 삽입 성공');
+})
+.catch(error => {
+    res.status(500).send('테스트 데이터 삽입 실패');
+});
+})
 
 app.get('/list', async (req, res) => {
   try {
@@ -144,33 +111,33 @@ app.get('/write', (req, res) => {
 
 // 글 작성 + 이미지 업로드 기능 추가
 // 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
-// app.post('/newPost',  async(req, res) => {
-//   console.log(req.user)
+app.post('/newPost',  async(req, res) => {
+  console.log(req.user)
   
-//   // console.log(req.file.location)
-//   try {
-//     if (!req.user || !req.user._id) {
-//       res.status(401).send('로그인이 필요합니다.');
-//     } else if (req.body.title === '') {
-//       res.send('제목을 입력해주세요');
-//     } else {
-//       await db.collection('post').insertOne({ 
-//         title: req.body.title, 
-//         content: req.body.content, 
-//         user: new ObjectId(req.user._id),
-//         username: req.user.username 
-//       });
-//       res.redirect('/list');
-//     }
-//   } catch (e) {
-//     console.error(e);
-//     res.status(500).send('서버 에러');
-//   }
+  // console.log(req.file.location)
+  try {
+    if (!req.user || !req.user._id) {
+      res.status(401).send('로그인이 필요합니다.');
+    } else if (req.body.title === '') {
+      res.send('제목을 입력해주세요');
+    } else {
+      await db.collection('post').insertOne({ 
+        title: req.body.title, 
+        content: req.body.content, 
+        user: new ObjectId(req.user._id),
+        username: req.user.username 
+      });
+      res.redirect('/list');
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('서버 에러');
+  }
   
 
 //   try {
 //     if (req.body.title == '') {
-//       res.send('제목을 입력해주세요')s
+//       res.send('제목을 입력해주세요')
 //     } else {
 //       await db.collection('post').insertOne({ 
 //         title : req.body.title, 
@@ -183,7 +150,37 @@ app.get('/write', (req, res) => {
 //     console.log(e);
 //     res.status.send('서버 에러')
 //   }
+});
+
+
+// app.get('/detail/:id', async(req, res) => {
+//   const postId = req.params.id;
+
+//   if (!ObjectId.isValid(postId)) {
+//     return res.status(404).send('Invalid post ID');
+//   }
+
+//   const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
+  
+//   if (!result) {
+//     return res.status(404).send('Post not found');
+//   }
+
+//   res.render('detail.ejs', { result: result });
 // });
+
+
+// app.get('/detail/:id', async(req, res) => {
+//   try {
+//     const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
+//     console.log(req.params)
+//     res.render('detail.ejs' ,{ result : result })
+
+//   } catch(e) {
+//     console.log(e);
+//     res.status(400).send('으에')
+//   }
+// })
 
 app.get('/detail/:id', async (req, res) => {
   try {
@@ -210,6 +207,7 @@ app.get('/detail/:id', async (req, res) => {
 });
 
 
+
 // 글 수정 기능
 app.get('/edit/:id', async(req, res) => {
 
@@ -222,6 +220,7 @@ app.get('/edit/:id', async(req, res) => {
   const result = await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
   console.log(result)
   res.render('edit.ejs', { result : result })
+
 })
 
 
@@ -271,6 +270,8 @@ app.get('/list/:id', async(req, res) => {
 
 app.get('/list/next/:id', async (req, res) => {
   try {
+    console.log('Received parameter value:', req.params.id);
+
     // 클라이언트에서 전달된 id 값이 ObjectId 형식인지 확인
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(400).send('Invalid ObjectId format');
@@ -278,18 +279,13 @@ app.get('/list/next/:id', async (req, res) => {
 
     const lastPostId = new ObjectId(req.params.id);
 
-    // DB에서 해당 ID보다 큰 게시물을 올바르게 검색
     const result = await db.collection('post').find({ _id: { $gt: lastPostId } }).limit(5).toArray();
-
-    // 클라이언트에게 올바른 데이터를 렌더링
     res.render('list.ejs', { 글목록: result });
   } catch (error) {
     console.error('Error in /list/next/:id:', error);
     res.status(500).send('Internal Server Error');
   }
 });
-
-
 
 // 제출한 id, pw가 db랑 일치하는지 검사 
 passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
@@ -318,179 +314,73 @@ passport.deserializeUser(async (user, done) => {
     return done(null, result)
   })
 })
+// 로그인 요청 처리
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login'
+}));
 
-// app.js (일부분)
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-// 사용자 인증 상태 확인 미들웨어
-function isAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next(); // 인증된 사용자일 경우 다음 미들웨어로 이동
-    }
-    res.redirect('/login'); // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
-}
-
-// 메인 페이지 라우트
-app.get('/', isAuthenticated, (req, res) => {
-    res.render('main', { user: req.user }); // 사용자 정보를 템플릿에 전달
+// 로그아웃 요청 처리
+app.get('/logout', function(req, res){
+  req.logout(function() {
+    res.redirect('/');
+  });
 });
 
-// 로그인 페이지 라우트
-app.get('/login', (req, res) => {
-  res.render('login', { isLoggedIn: req.isAuthenticated() });
-});
-
-// // 로그아웃 라우트
-// app.get('/logout', (req, res) => {
-//     req.logout(); // PassportJS의 logout 메서드를 호출하여 세션에서 사용자 정보를 제거
-//     res.redirect('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트
-// });
-// app.post('/login', (req, res) => {
-//   // 로그인 로직을 여기에 작성합니다.
-//   const { username, password } = req.body;
-
-//   // 예시: 간단한 로그인 검증
-//   if (username === 'user' && password === 'password') {
-//       // 로그인 성공
-//       // res.send('로그인 성공!');
-//       res.redirect('/main');
-//   } else {
-//       // 로그인 실패
-//       res.send('로그인 실패: 유저명 또는 비밀번호가 잘못되었습니다.');
-//   }
-// });
-
-// app.get('/main', (req, res) => {
-//   // 이 부분에 메인 페이지를 렌더링하거나 메인 페이지의 HTML을 보내는 로직을 작성합니다.
-//   // 예시: 메인 페이지를 렌더링하는 경우
-//   res.render('main'); // 'main'은 메인 페이지의 템플릿 이름입니다. 실제로 사용하는 템플릿 이름으로 변경해야 합니다.
-// });
-
-app.post('/login', (req, res) => {
-  // 로그인 로직을 처리한 후 세션에 사용자 정보를 저장합니다.
-  req.session.isLoggedIn = true;
-  // 로그인 후 메인 페이지로 리다이렉션합니다.
-  res.redirect('/main');
-});
-
-app.get('/logout', (req, res) => {
-  // 로그아웃 요청을 처리하고 세션에서 사용자 정보를 제거합니다.
-  req.session.isLoggedIn = false;
-  // 로그아웃 후 메인 페이지로 리다이렉션합니다.
-  res.redirect('/main');
-});
-
-app.get('/main', (req, res) => {
-  // 메인 페이지에 사용자의 로그인 상태를 전달합니다.
-  res.render('main', { isLoggedIn: req.session.isLoggedIn });
+app.get('/', function(req, res) {
+  res.render('main', { isLoggedIn: req.isAuthenticated() });
 });
 
 // 로그인 기능
-// app.get('/login', async (req, res) => {
-//   console.log(req.user)
-//   res.render('login.ejs')
-// })
+app.get('/login', async (req, res) => {
+  console.log(req.user)
+  res.render('login.ejs')
+})
 
-// app.post('/login', async (req, res, next) => {
-//   passport.authenticate('local', (error, user, info) => { 
-//     if (error) return res.status(500).json(error);
-//     if (!user) return res.status(401).json(info.message);
+app.post('/login', async (req, res, next) => {
+  passport.authenticate('local', (error, user, info) => { 
+    if (error) return res.status(500).json(error);
+    if (!user) return res.status(401).json(info.message);
 
-//     req.logIn(user, (err) => {
-//       if (err) return next(err); 
+    req.logIn(user, (err) => {
+      if (err) return next(err); 
 
-//             res.render('main.ejs', { user: user });
-//       // 로그인 성공 시 메인 페이지로 리디렉션
-//       // res.redirect('/');
-//     });
-//   })(req, res, next);
-// });
+      // 로그인 성공시에는 원하는 작업을 수행하고 리다이렉트
+      console.log(`User ${user.username} logged in successfully.`);
+      return res.redirect('/');  // 메인페이지로 이동
+    });
+  })(req, res, next);
+});
+app.get('/', (req, res) => {
+  res.render('main', { isLoggedIn: req.isAuthenticated() });
+});
 
-
-// app.post('/login', async (req, res, next) => {
-//   passport.authenticate('local', (error, user, info) => { 
-//     if (error) return res.status(500).json(error);
-//     if (!user) return res.status(401).json(info.message);
-
-//     req.logIn(user, (err) => {
-//       if (err) return next(err); 
-
-//       // 로그인 성공 시 메인 페이지로 리디렉션
-//       res.redirect('/'); 
-//     });
-//   })(req, res, next);
-// });
-
-// app.get('/', (req, res) => {
-//   // 메인 페이지 렌더링 시에 사용자 정보를 전달하지 않음
-//   res.render('main'); 
-// });
+app.get('/main', (req, res) => {
+  res.render('main', { isLoggedIn: true });
+});
 
 
-// app.post('/login', async (req, res, next) => {
-//   passport.authenticate('local', (error, user, info) => { 
-//     if (error) return res.status(500).json(error);
-//     if (!user) return res.status(401).json(info.message);
+// 가입 기능
+app.get('/join', (req, res) => {
+  res.render('join.ejs')
+})
 
-//     req.logIn(user, (err) => {
-//       if (err) return next(err); 
-
-//       // 로그인 성공 시 사용자 정보를 템플릿으로 전달
-//       res.render('main.ejs', { user: user });
-//       res.render('login.ejs', { user: user });
-//     });
-//   })(req, res, next);
-// });
-
-
-
-// app.post('/login', async (req, res, next) => {
-//   passport.authenticate('local', (error, user, info) => { 
-//     if (error) return res.status(500).json(error);
-//     if (!user) return res.status(401).json(info.message);
-
-//     req.logIn(user, (err) => {
-//       if (err) return next(err); 
-
-//       // 로그인 성공시에는 원하는 작업을 수행하고 리다이렉트
-//       console.log(`User ${user.username} logged in successfully.`);
-//       return res.redirect('/');  // 메인페이지로 이동
-//     });
-//   })(req, res, next);
-// });
-
-// app.get('/logout', (req, res) => {
-//   req.logout(); // PassportJS의 logout 메서드를 호출하여 세션에서 사용자 정보를 제거합니다.
-//   res.redirect('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트합니다.
-// });
-
-// // 가입 기능
-// app.get('/join', (req, res) => {
-//   res.render('join.ejs')
-// })
-
-// app.post('/join', async (req, res) => {
-//   await db.collection('user').insertOne({ 
-//     username : req.body.username,
-//     password : req.body.password,
-//     email : req.body.email
-//   })
-//   res.redirect('/')  // 메인페이지로 이동
-// })
+app.post('/join', async (req, res) => {
+  await db.collection('user').insertOne({ 
+    username : req.body.username,
+    password : req.body.password,
+    email : req.body.email
+  })
+  res.redirect('/')  // 메인페이지로 이동
+})
 
 // 댓글 기능
 app.post('/comment', async (req, res) => {
   await db.collection('comment').insertOne({ 
     content: req.body.content,
-    writerId: new ObjectId(req.user._id),
+    writerId: new ObjectId(req.user.id),
     writer: req.user.username,
     parentId: new ObjectId(req.body.parentId) // 수정: parantId -> parentId
   });
   res.redirect('back');
 });
-
-
-// 로그아웃 기능 추가
-// css 수정
