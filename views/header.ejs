@@ -10,32 +10,50 @@
     <a href="/" style="font-size: 3rem;">HOME</a>
     <a href="/write"><p>WRITE</p></a>
     <a href="/list"><p>LIST</p></a>
-    <a href="#" id="login"><p>LOGIN</p></a>
+    <a href="/login" id="login"><p>LOGIN</p></a>
+    <a href="/logout" id="logout"><p>LOGOUT</p></a>
+
     <a href="/join"><p>SIGN UP</p></a>
   </div>
 
   <script>
-    // 페이지 로드 시 호출되는 함수
     document.addEventListener("DOMContentLoaded", function() {
       const loginLink = document.getElementById('login');
+      const logoutLink = document.getElementById('logout');
       let isLoggedIn = false;
 
       // 로그인 상태에 따라 링크 텍스트 변경
       function updateLoginLink() {
         if (isLoggedIn) {
-          loginLink.href = "/logout"; // 로그아웃 링크로 변경합니다.
-          loginLink.querySelector('p').innerText = "LOGOUT"; // 텍스트를 "LOGOUT"으로 변경합니다.
+          loginLink.href = "/logout"; // 로그아웃 링크로 변경
+          loginLink.querySelector('p').innerText = "LOGOUT"; // 텍스트 업데이트
         } else {
-          loginLink.href = "/login"; // 로그인 링크로 변경합니다.
-          loginLink.querySelector('p').innerText = "LOGIN"; // 텍스트를 "LOGIN"으로 변경합니다.
+          loginLink.href = "/login"; // 로그인 링크로 변경
+          loginLink.querySelector('p').innerText = "LOGIN"; // 텍스트 업데이트
         }
       }
 
       // 로그인 버튼 클릭 이벤트 처리
       loginLink.addEventListener('click', function(event) {
-        event.preventDefault(); // 링크의 기본 동작을 막음
-        isLoggedIn = !isLoggedIn; // 로그인 상태를 토글합니다.
-        updateLoginLink(); // 링크를 업데이트합니다.
+        event.preventDefault(); // 기본 동작 막기
+        if (isLoggedIn) {
+          // 로그아웃 로직 처리
+          window.location.href = "/logout"; // 로그아웃 페이지로 이동
+          isLoggedIn = false; // 로그아웃 상태로 설정
+          updateLoginLink(); // 링크 업데이트
+        } else {
+          // 로그인 페이지로 이동
+          window.location.href = "/login"; // 로그인 페이지로 이동
+        }
+      });
+
+      // 로그아웃 버튼 클릭 이벤트 처리
+      logoutLink.addEventListener('click', function(event) {
+        event.preventDefault(); // 기본 동작 막기
+        // 로그아웃 로직 처리
+        window.location.href = "/logout"; // 로그아웃 페이지로 이동
+        isLoggedIn = false; // 로그아웃 상태로 설정
+        updateLoginLink(); // 링크 업데이트
       });
 
       // 페이지 로드시 로그인 링크 업데이트
