@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="main.css">
 </head>
-  <body class="grey-bg">
- 
+
+<body class="grey-bg">
+
   <%- include('header.ejs') %>
 
-  <div class="white-bg">
-    <% for (let i = 0; i < 글목록.length; i++) { %>
-      <div class="list-box">
-        <h2 style="font-size: 1rem;">
-          <%= i + 1 %>.
-          <a href="/detail/<%= 글목록[i]._id %>"><%= 글목록[i].title %></a>
-        </h2>
-        <p>작성일: <%= new Date(글목록[i].createdAt).toLocaleString() %></p>
-       <!-- <p>글 내용</p> -->
-      </div>
-    <% } %>
-
-  </div>
+    <div class="white-bg">
+      <% for (let i=0; i < 글목록.length; i++) { %>
+        <div class="list-box">
+          <h2 style="font-size: 1rem;">
+            <%= i + 1 %>.
+              <a href="/detail/<%= 글목록[i]._id %>">
+                <%= 글목록[i].title %>
+                
+              </a>
 
 
-  <% if (글목록 && Array.isArray(글목록) && 글목록.length > 0) { %>
-    <a href="/list/next/<%= 글목록[글목록.length-1]._id %>">다음</a>
-  <% } else { %>
-    <p>글목록이 비어있습니다.</p>
-  <% } %>
 
 
-  <!-- <% if (글목록.length > 0) { %>
-    <a href="/list/next/<%= 글목록[글목록.length-1]._id %>">다음</a>
-  <% } else { %>
-    <p>글목록이 비어있습니다.</p>
-  <% } %> -->
+          </h2>
 
-  </body>
+          <% const createdAt = new Date(글목록[i].createdAt); %>
+          <p>작성 시간: <%= createdAt.toLocaleDateString() %> <%= createdAt.toLocaleTimeString() %></p> 
+        </div>
+
+        <% } %>
+
+    </div>
+
+</body>
+
 </html>
