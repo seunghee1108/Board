@@ -105,27 +105,26 @@ app.get('/list', async (req, res) => {
 });
 
 
+
 app.get('/write', (req, res) => {
   res.render('write.ejs')
 });
 
 // 글 작성 + 이미지 업로드 기능 추가
 // 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
-app.post('/newPost',  async(req, res) => {
-  console.log(req.user)
-  
-  // console.log(req.file.location)
+app.post('/newPost', async (req, res) => {
   try {
     if (!req.user || !req.user._id) {
       res.status(401).send('로그인이 필요합니다.');
     } else if (req.body.title === '') {
       res.send('제목을 입력해주세요');
     } else {
-      await db.collection('post').insertOne({ 
-        title: req.body.title, 
-        content: req.body.content, 
+      await db.collection('post').insertOne({
+        title: req.body.title,
+        content: req.body.content,
         user: new ObjectId(req.user._id),
-        username: req.user.username 
+        username: req.user.username,
+        createdAt: new Date() // 작성 시간 추가
       });
       res.redirect('/list');
     }
@@ -133,54 +132,9 @@ app.post('/newPost',  async(req, res) => {
     console.error(e);
     res.status(500).send('서버 에러');
   }
-  
-
-//   try {
-//     if (req.body.title == '') {
-//       res.send('제목을 입력해주세요')
-//     } else {
-//       await db.collection('post').insertOne({ 
-//         title : req.body.title, 
-//         content : req.body.content, 
-//         user : req.user._id,
-//         username : req.user.username })
-//       res.redirect('/list')
-//     }
-//   } catch(e) {
-//     console.log(e);
-//     res.status.send('서버 에러')
-//   }
 });
 
 
-// app.get('/detail/:id', async(req, res) => {
-//   const postId = req.params.id;
-
-//   if (!ObjectId.isValid(postId)) {
-//     return res.status(404).send('Invalid post ID');
-//   }
-
-//   const result = await db.collection('post').findOne({ _id: new ObjectId(postId) });
-  
-//   if (!result) {
-//     return res.status(404).send('Post not found');
-//   }
-
-//   res.render('detail.ejs', { result: result });
-// });
-
-
-// app.get('/detail/:id', async(req, res) => {
-//   try {
-//     const result =  await db.collection('post').findOne({ _id : new ObjectId(req.params.id) })
-//     console.log(req.params)
-//     res.render('detail.ejs' ,{ result : result })
-
-//   } catch(e) {
-//     console.log(e);
-//     res.status(400).send('으에')
-//   }
-// })
 
 app.get('/detail/:id', async (req, res) => {
   try {
@@ -189,7 +143,6 @@ app.get('/detail/:id', async (req, res) => {
     if (!ObjectId.isValid(postId)) {
       return res.status(404).send('Invalid post ID');
     }
-
     
     const result2 = await db.collection('comment').find({ parentId : new ObjectId(req.params.id) }).toArray();
 
@@ -205,7 +158,6 @@ app.get('/detail/:id', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 
 // 글 수정 기능
@@ -249,13 +201,39 @@ app.post('/edit/', async (req, res) => {
   }
 });
 
-
 app.get('/delete/:id', async (req, res) => {
   try {
-    await db.collection('post').deleteOne({ _id: new ObjectId(req.params.id) });
+    const postId = req.params.id;
+
+    // 요청된 게시물 ID가 유효한지 확인합니다.
+    if (!ObjectId.isValid(postId)) {
+      return res.status(404).send('유효하지 않은 게시물 ID');
+    }
+
+    // 데이터베이스에서 해당 게시물을 찾습니다.
+    const post = await db.collection('post').findOne({ _id: new ObjectId(postId) });
+
+    // 게시물을 찾지 못한 경우 404 오류를 반환합니다.
+    if (!post) {
+      return res.status(404).send('게시물을 찾을 수 없습니다.');
+    }
+
+    // 세션에 저장된 사용자 ID를 가져옵니다.
+    const loggedInUserId = req.user._id;
+
+    // 게시물의 작성자 ID를 가져옵니다.
+    const postAuthorId = post.user;
+
+    // 작성자와 현재 로그인한 사용자를 비교하여 권한을 확인합니다.
+    if (loggedInUserId.toString() !== postAuthorId.toString()) {
+      return res.status(403).send('글 삭제 권한이 없습니다.');
+    }
+
+    // 작성자와 로그인한 사용자가 동일한 경우에만 게시물을 삭제합니다.
+    await db.collection('post').deleteOne({ _id: new ObjectId(postId) });
     res.redirect('/list');
   } catch (error) {
-    console.error(error);
+    console.error('글 삭제 중 오류:', error);
     res.status(500).send('글 삭제 중 오류가 발생했습니다.');
   }
 });
@@ -268,23 +246,24 @@ app.get('/list/:id', async(req, res) => {
   res.render('list.ejs', { 글목록 : result })
 })
 
+
 app.get('/list/next/:id', async (req, res) => {
-  try {
-    console.log('Received parameter value:', req.params.id);
+    try {
+        console.log('Received parameter value:', req.params.id);
 
-    // 클라이언트에서 전달된 id 값이 ObjectId 형식인지 확인
-    if (!ObjectId.isValid(req.params.id)) {
-      return res.status(400).send('Invalid ObjectId format');
+        // 클라이언트에서 전달된 id 값이 ObjectId 형식인지 확인
+        if (!ObjectId.isValid(req.params.id)) {
+            return res.status(400).send('Invalid ObjectId format');
+        }
+
+        const lastPostId = new ObjectId(req.params.id); // ObjectId 생성
+
+        const result = await db.collection('post').find({ _id: { $gt: lastPostId } }).limit(5).toArray();
+        res.render('list.ejs', { 글목록: result });
+    } catch (error) {
+        console.error('Error in /list/next/:id:', error);
+        res.status(500).send('Internal Server Error');
     }
-
-    const lastPostId = new ObjectId(req.params.id);
-
-    const result = await db.collection('post').find({ _id: { $gt: lastPostId } }).limit(5).toArray();
-    res.render('list.ejs', { 글목록: result });
-  } catch (error) {
-    console.error('Error in /list/next/:id:', error);
-    res.status(500).send('Internal Server Error');
-  }
 });
 
 // 제출한 id, pw가 db랑 일치하는지 검사 
@@ -360,6 +339,8 @@ app.get('/main', (req, res) => {
 });
 
 
+
+
 // 가입 기능
 app.get('/join', (req, res) => {
   res.render('join.ejs')
@@ -384,3 +365,15 @@ app.post('/comment', async (req, res) => {
   });
   res.redirect('back');
 });
+
+app.get('/chat/request', async (req, res) => {
+  await db.collection('chatroom').insertOne({
+    member : [req.user._id, req.query.writerId],
+    date : new Date()
+  })
+  res.render('chatlist.ejs')
+})
+
+app.get('/chat/list', async (req, res) => {
+  
+})
