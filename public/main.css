@@ -1,30 +1,67 @@
 body {
   background-color: #f0f0f0;
-  font-family: 'Arial', sans-serif;
+  font-family: "Kode Mono", monospace;
+  font-weight: weight;
   margin: 0;
   padding: 0;
 }
 
 .header {
   margin-bottom: 5vh;
-  background-color: #333;
-  color: #fff;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+
+}
+
+.detail-bg h {
+  font-size: 1.5rem;
+  margin-bottom: 3vw;
+
+}
+
+table {
+  width: 100 vw;
+  margin: 5vh;
+  border-collapse: collapse;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+th,
+td {
+  border: 1px solid #dddddd;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+h1 {
+  font-size: 3rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
 .header a {
   text-decoration: none;
-  color: #fff;
-  margin-right: 20px;
-  font-size: 1rem;
+  color: #427D9D;
+  margin-top: 3vh;
+  margin-right: 2vw;
+  font-size: 1.2rem;
 }
 
-/* .header a:hover {
-
-} */
+.header a:hover {
+  color:
+    #164863;
+}
 
 .header p {
   margin: 0;
@@ -38,22 +75,35 @@ body {
   /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
 }
 
+.detail-bg {
+  width: 40vw;
+  height: 60vh;
+  background-color: hsl(0, 0%, 100%);
+  padding: 3vw;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+}
+
 /* 글쓰기 form */
 .form-box {
-  width: 60vw;
+  width: 30vw;
   height: auto;
   background-color: hsl(0, 0%, 100%);
   padding: 3vw;
   margin: auto;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
 .form-box h4 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-bottom: 3vw;
   text-align: center;
+  color: #7D7C7C;
 }
 
 .form-box input,
@@ -67,13 +117,14 @@ body {
 
 .form-box button {
   width: 20%;
-  background-color: #3498db;
+  background-color: #9BBEC8;
   color: #fff;
-  padding: 1vw 2vw;
+  /* padding: 1vw 2vw; */
   border: none;
   border-radius: 4px;
   cursor: pointer;
   height: 5vh;
+  font-size: 0.8rem;
   margin-top: 2vw;
 }
 
@@ -95,95 +146,18 @@ body {
 
 
 .form-box button:hover {
-  background-color: #2980b9;
+  background-color: #427D9D;
 }
 
-/* 회원가입 form */
-.join-form {
-  width: 50vw;
-  height: auto;
-  padding: 3vw;
-  margin:auto;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
+.button-group a {
+  display: inline-block;
+  /* 인라인 블록 요소로 설정하여 이미지 영역을 링크로 만듭니다. */
+  width: 30px;
+  /* 이미지의 너비를 조정할 수 있습니다. */
+  height: 30px;
+  /* 이미지의 높이를 조정할 수 있습니다. */
+
 }
-
-.join-form h4 {
-  font-size: 1.5rem;
-  margin-bottom: 3vw;
-}
-
-.join-form input {
-  width: calc(100% - 2vw);
-  margin-bottom: 2vw;
-  padding: 1vw;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.join-form button {
-  width : 100%;
-  background-color: #27ae60;
-  color: #fff;
-  padding: 1vw 2vw;
-  height: 4vh;
-  margin-top: 2vw; 
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.join-form button:hover {
-  background-color: #219653;
-}
-
-/* 로그인 form */
-.login-form {
-  width: 30vw;
-  height: auto;
-  padding: 3vw;
-  margin:auto;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.login-form h4 {
-  font-size: 1.5rem;
-  margin-bottom: 3vw;
-}
-
-.login-form input {
-  width: calc(100% - 2vw);
-  margin-bottom: 2vw;
-  padding: 1vw;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.login-form button {
-  width : 100%;
-  background-color: #27ae60;
-  color: #fff;
-  padding: 1vw 2vw;
-  height: 4vh;
-  margin-top: 2vw; 
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.login-form button:hover {
-  background-color: #219653;
-}
-
-
-
-
-/* 글목록  */
 
 /* 글 목록을 담는 컨테이너 */
 .white-bg {
@@ -194,32 +168,6 @@ body {
   margin: 20px auto;
   width: 80%;
 }
-/* 
-.list-box {
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-}
-
-.list-box h2 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-}
-
-.list-box a {
-  text-decoration: none;
-  color: #3498db; */
-  /* margin-right: 10px; */
-/* } */
-
-/* 
-
-.white-bg {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
 /* 개별 글 목록 항목 */
 .list-box {
@@ -227,9 +175,9 @@ body {
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 5px;
-} */
+}
 
-.list-box h2 {
+*/ .list-box h2 {
   margin-bottom: 5px;
 }
 
@@ -250,7 +198,7 @@ body {
 }
 
 /* 다음 페이지 링크 스타일링 */
-.next-page-link {
+/* .next-page-link {
   display: block;
   margin-top: 20px;
   text-align: center;
@@ -263,99 +211,10 @@ body {
 
 .next-page-link a:hover {
   text-decoration: underline;
-}
-
-/* .white-bg {
-  background-color: #fff;
-  padding: 20px;
-  margin: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.list-box {
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-}
-
-.list-box h2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.list-box a {
-  text-decoration: none;
-  color: #333;
-  margin-right: 10px;
-  font-size: 1rem;
-}
-
-.list-box a:hover {
-  text-decoration: underline;
-}
-
-.list-box p {
-  margin: 10px 0;
-}
+} */
 
 
 .detail-bg {
-  background-color: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  padding: 20px;
-  margin: 20px;
-}
-
-.detail-bg h4 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-.detail-bg p {
-  color: #555555;
-  line-height: 1.6;
-}
-
-.detail-bg hr {
-  border: 1px solid #dddddd;
-  margin-top: 20px;
-}
-
-.detail-bg div {
-  margin-top: 20px;
-}
-
-.detail-bg strong {
-  color: #007bff;
-}
-
-.detail-bg form {
-  margin-top: 20px;
-}
-
-.detail-bg input,
-.detail-bg button {
-  padding: 10px;
-  margin-right: 10px;
-}
-
-.detail-bg button {
-  background-color: #007bff;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.detail-bg button:hover {
-  background-color: #0056b3;
-}
- */
-
- .detail-bg {
   padding: 20px;
 }
 
@@ -385,8 +244,10 @@ body {
 }
 
 .comment-form input {
-  width: 80%;
-  margin-bottom: 10px;
+  width: 20vw;
+  height: 2.4vh;
+  margin-bottom: 5vh;
+  margin: 2vw;
 }
 
 .comment-form button {
