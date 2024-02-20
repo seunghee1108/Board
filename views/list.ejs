@@ -13,10 +13,10 @@
   <%- include('header.ejs') %>
 
     <div class="white-bg">
-      <% for (let i=0; i < 글목록.length; i++) { %>
+      <% for (let i = 글목록.length - 1; i >= 0; i--) { %>
         <div class="list-box">
           <h2 style="font-size: 1rem;">
-            <%= i + 1 %>.
+            <%= 글목록.length - i %>.
               <a href="/detail/<%= 글목록[i]._id %>">
                 <%= 글목록[i].title %>
                 
