@@ -115,7 +115,7 @@ app.get('/write', (req, res) => {
 app.post('/newPost', async (req, res) => {
   try {
     if (!req.user || !req.user._id) {
-      res.status(401).send('로그인이 필요합니다.');
+      res.status(401).send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
     } else if (req.body.title === '') {
       res.send('제목을 입력해주세요');
     } else {
@@ -361,7 +361,7 @@ app.post('/comment', async (req, res) => {
     content: req.body.content,
     writerId: new ObjectId(req.user.id),
     writer: req.user.username,
-    parentId: new ObjectId(req.body.parentId) // 수정: parantId -> parentId
+    parentId: new ObjectId(req.body.parentId) 
   });
   res.redirect('back');
 });
@@ -377,3 +377,5 @@ app.get('/chat/request', async (req, res) => {
 app.get('/chat/list', async (req, res) => {
   
 })
+
+
