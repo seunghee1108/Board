@@ -22,14 +22,14 @@ const LocalStrategy = require('passport-local')
 
 app.use(passport.initialize())
 app.use(session({
-  secret: '암호화에 쓸 비번',
+  secret: '1108',
   resave : false,
   saveUninitialized : false,
   cookie : { maxAge : 60 * 60 * 1000 }, 
-  // store : MongoStore.create({
-    // mongoUrl :'mongodb+srv://admin:sh123@cluster0.lfkcymr.mongodb.net/?retryWrites=true&w=majority',
-    // dbName : 'Board'
-  // })
+  store : MongoStore.create({
+    mongoUrl :'mongodb+srv://admin:sh123@cluster0.lfkcymr.mongodb.net/?retryWrites=true&w=majority',
+    dbName : 'Board'
+  })
 }))
 
 app.use(passport.session()) 
@@ -60,12 +60,12 @@ app.use(passport.session())
 
 
 let db;
-const url = 'mongodb+srv://admin:sh123@cluster0.lfkcymr.mongodb.net/?retryWrites=true&w=majority'
+const url = process.env.DB_URL
 
 new MongoClient(url).connect().then((client) => {
   console.log('DB연결성공')
   db = client.db('Board')
-	app.listen(PORT, () => {
+	app.listen(process.env.PORT, () => {
     console.log(`서버가 http://localhost:${PORT} 에서 실행 중입니다.`);
    });
 }).catch((err) => {
