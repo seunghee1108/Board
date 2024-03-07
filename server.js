@@ -40,30 +40,28 @@ app.use(passport.session());
 
 // iam 계정 액세스 키
 // * IAM bucket 새로 만들어야 됨
-const { S3Client } = require('@aws-sdk/client-s3')
-const multer = require('multer')
-const multerS3 = require('multer-s3')
+const { S3Client } = require("@aws-sdk/client-s3");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
 const s3 = new S3Client({
-  region : 'ap-northeast-2',
-  credentials : {
-      accessKeyId : process.env.S3_KEY,
-      secretAccessKey : process.env.S3_SECRET
-      // 작성한 액세스 키 삭제함, 환경변수로 작성해야 됨
-  }
-})
+  region: "ap-northeast-2",
+  credentials: {
+    accessKeyId: process.env.S3_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+    // 작성한 액세스 키 삭제함, 환경변수로 작성해야 됨
+  },
+});
 
 // s3 bucket
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: 'boardproject',
+    bucket: "boardproject",
     key: function (요청, file, cb) {
-      cb(null, Date.now().toString()) //업로드시 파일명 변경가능
-    }
-  })
-})
-
-
+      cb(null, Date.now().toString()); //업로드시 파일명 변경가능
+    },
+  }),
+});
 
 let db;
 const url = process.env.DB_URL;
@@ -83,9 +81,9 @@ new MongoClient(url)
 
 app.set("view engine", "ejs"); // view engine을 ejs로 설정
 
-app.get("/", (req, res) => {
-  res.render("main"); // render 메서드를 사용하여 index.ejs를 렌더링
-});
+// app.get("/", (req, res) => {
+//   res.render("main"); // render 메서드를 사용하여 index.ejs를 렌더링
+// });
 
 // app.get('/', (req, res) => {
 //   res.sendFile(__dirname + '/index.html')
@@ -100,7 +98,7 @@ app.get("/test", (req, res) => {
       res.send("테스트 데이터 삽입 성공");
     })
     .catch((error) => {
-      res.status(500).send( "테스트 데이터 삽입 실패");
+      res.status(500).send("테스트 데이터 삽입 실패");
     });
 });
 
@@ -118,13 +116,16 @@ app.get("/write", (req, res) => {
   res.render("write.ejs");
 });
 
-
 // 글 작성 + 이미지 업로드 기능 추가
 // 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
-app.post("/newPost", upload.single('img'), async (req, res) => {
+app.post("/newPost", upload.single("img"), async (req, res) => {
   try {
     if (!req.user || !req.user._id) {
-      return res.status(401).send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
+      return res
+        .status(401)
+        .send(
+          '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+        );
     } else if (req.body.title === "") {
       return res.send("제목을 입력해주세요");
     } else {
@@ -134,7 +135,7 @@ app.post("/newPost", upload.single('img'), async (req, res) => {
         content: req.body.content,
         user: new ObjectId(req.user._id),
         username: req.user.username,
-        createdAt: new Date() // 작성 시간 추가
+        createdAt: new Date(), // 작성 시간 추가
       };
 
       // 이미지가 있을 경우에만 img 필드 추가
@@ -150,7 +151,6 @@ app.post("/newPost", upload.single('img'), async (req, res) => {
     return res.status(500).send("서버 에러");
   }
 });
-
 
 app.get("/detail/:id", async (req, res) => {
   try {
@@ -368,9 +368,9 @@ app.get("/logout", function (req, res) {
   });
 });
 
-app.get("/", function (req, res) {
-  res.render("main", { isLoggedIn: req.isAuthenticated() });
-});
+// app.get("/", function (req, res) {
+//   res.render("main", { isLoggedIn: req.isAuthenticated() });
+// });
 
 // 로그인 기능
 app.get("/login", async (req, res) => {
@@ -392,12 +392,13 @@ app.post("/login", async (req, res, next) => {
     });
   })(req, res, next);
 });
+
 app.get("/", (req, res) => {
-  res.render("main", { isLoggedIn: req.isAuthenticated() });
+  res.render("main", { userInfo: req.isAuthenticated() ? req.user : null });
 });
 
 app.get("/main", (req, res) => {
-  res.render("main", { isLoggedIn: true });
+  res.render("main", { userInfo: req.isAuthenticated() ? req.user : null });
 });
 
 // 가입 기능
@@ -416,15 +417,27 @@ app.post("/join", async (req, res) => {
 
 // 댓글 기능
 app.post("/comment", async (req, res) => {
-  await db.collection("comment").insertOne({
-    content: req.body.content,
-    writerId: new ObjectId(req.user.id),
-    writer: req.user.username,
-    parentId: new ObjectId(req.body.parentId),
-  });
-  res.redirect("back");
-});
+  if (!req.user || !req.user._id) {
+    return res
+      .status(401)
+      .send(
+        '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
+      );
+  }
 
+  try {
+    await db.collection("comment").insertOne({
+      content: req.body.content,
+      writerId: new ObjectId(req.user._id), // req.user._id로 수정
+      writer: req.user.username,
+      parentId: new ObjectId(req.body.parentId),
+    });
+    res.redirect("back");
+  } catch (error) {
+    console.error("댓글 작성 중 오류:", error);
+    res.status(500).send("댓글 작성 중 오류가 발생했습니다.");
+  }
+});
 app.get("/chat/request", async (req, res) => {
   await db.collection("chatroom").insertOne({
     member: [req.user._id, req.query.writerId],
