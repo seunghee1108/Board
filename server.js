@@ -118,37 +118,39 @@ app.get("/write", (req, res) => {
   res.render("write.ejs");
 });
 
+
 // 글 작성 + 이미지 업로드 기능 추가
 // 글과 함께 이미지를 서버로 보내면 서버는 s3에 이미지 저장
 app.post("/newPost", upload.single('img'), async (req, res) => {
-  
-// console.log( req.file);
-
   try {
     if (!req.user || !req.user._id) {
-      res
-        .status(401)
-        .send(
-          '<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>'
-        );
+      return res.status(401).send('<script>alert("로그인이 필요합니다."); window.location.href = "/login";</script>');
     } else if (req.body.title === "") {
-      res.send("제목을 입력해주세요");
+      return res.send("제목을 입력해주세요");
     } else {
-      await db.collection("post").insertOne({
+      // 이미지가 있을 때와 없을 때를 나누어 처리합니다.
+      const postData = {
         title: req.body.title,
         content: req.body.content,
         user: new ObjectId(req.user._id),
         username: req.user.username,
-        createdAt: new Date(), // 작성 시간 추가
-        img: req.file.location
-      });
-      res.redirect("/list");
+        createdAt: new Date() // 작성 시간 추가
+      };
+
+      // 이미지가 있을 경우에만 img 필드 추가
+      if (req.file) {
+        postData.img = req.file.location;
+      }
+
+      await db.collection("post").insertOne(postData);
+      return res.redirect("/list");
     }
   } catch (e) {
     console.error(e);
-    res.status(500).send("서버 에러");
+    return res.status(500).send("서버 에러");
   }
 });
+
 
 app.get("/detail/:id", async (req, res) => {
   try {
