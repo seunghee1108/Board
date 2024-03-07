@@ -182,17 +182,39 @@ app.get("/detail/:id", async (req, res) => {
 
 // 글 수정 기능
 app.get("/edit/:id", async (req, res) => {
-  const postId = req.params.id;
+  try {
+    const postId = req.params.id;
 
-  if (!ObjectId.isValid(postId)) {
-    return res.status(404).send("Invalid post ID");
+    if (!ObjectId.isValid(postId)) {
+      return res.status(404).send("잘못된 게시물 ID입니다.");
+    }
+
+    const post = await db
+      .collection("post")
+      .findOne({ _id: new ObjectId(postId) });
+
+    // 요청된 게시물이 존재하지 않는 경우 404 오류를 반환합니다.
+    if (!post) {
+      return res.status(404).send("게시물을 찾을 수 없습니다.");
+    }
+
+    // 현재 로그인한 사용자의 ID를 가져옵니다.
+    const loggedInUserId = req.user._id;
+
+    // 게시물의 작성자 ID를 가져옵니다.
+    const postAuthorId = post.user;
+
+    // 작성자와 현재 로그인한 사용자를 비교하여 권한을 확인합니다.
+    if (loggedInUserId.toString() !== postAuthorId.toString()) {
+      return res.status(403).send("글 수정 권한이 없습니다.");
+    }
+
+    // 작성자와 로그인한 사용자가 동일한 경우에만 게시물을 편집할 수 있습니다.
+    res.render("edit.ejs", { result: post });
+  } catch (error) {
+    console.error("게시물 편집 중 오류:", error);
+    res.status(500).send("게시물 편집 중 오류가 발생했습니다.");
   }
-
-  const result = await db
-    .collection("post")
-    .findOne({ _id: new ObjectId(req.params.id) });
-  console.log(result);
-  res.render("edit.ejs", { result: result });
 });
 
 app.post("/edit/", async (req, res) => {
