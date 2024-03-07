@@ -236,7 +236,7 @@ h1 {
 }
 
 .button-group {
-  margin-bottom: 20px;
+  margin-top: 50px;
 }
 
 .button-group .button {
@@ -308,3 +308,4 @@ a {
 .button-id:active {
   background-color: #004080; /* 클릭 시 배경색 변경 */
 }
+
