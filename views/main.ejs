@@ -10,24 +10,15 @@
 
 <%- include('header.ejs') %>
 
- <h2 style="text-align: center;  ">INFO</h2>
-<table  >
+
+<h2 style="text-align: center;"><%= userInfo ? userInfo.username : '' %>님 반갑습니다!</h2>
+<table>
   <tr>
     <th>ID</th>
-    <td>SHSH</td>
+    <td><%= userInfo ? userInfo.username : '' %></td>
   </tr>
-  <tr>
-    <th>NAME</th>
-    <td>BANGSUENGHEE</td>
-  </tr>
-  <tr>
-    <th>Email</th>
-    <td>bangseunghee1108@gmail.com</td>
-  </tr>
-  <tr>
-    <th>BIRTH</th>
-    <td>1996.11.08</td>
-  </tr>
+
+  
 </table>
 
 </body>
