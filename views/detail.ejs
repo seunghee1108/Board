@@ -18,6 +18,12 @@
     
         <p><%= result.content %></p>
 
+
+        <% if (result.img) { %>
+          <img src="<%= result.img %>" alt="이미지" width="300" height="200" margin-top="20px" />
+        <% } %>
+      
+
         <div class="button-group">
             <a href="/edit/<%= result._id %>">
               📝
