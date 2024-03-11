@@ -81,14 +81,6 @@ new MongoClient(url)
 
 app.set("view engine", "ejs"); // view engine을 ejs로 설정
 
-// app.get("/", (req, res) => {
-//   res.render("main"); // render 메서드를 사용하여 index.ejs를 렌더링
-// });
-
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '/index.html')
-// })
-
 // DB에 잘 저장되는지 test
 app.get("/test", (req, res) => {
   // data : collection name
@@ -368,10 +360,6 @@ app.get("/logout", function (req, res) {
   });
 });
 
-// app.get("/", function (req, res) {
-//   res.render("main", { isLoggedIn: req.isAuthenticated() });
-// });
-
 // 로그인 기능
 app.get("/login", async (req, res) => {
   console.log(req.user);
@@ -412,7 +400,9 @@ app.post("/join", async (req, res) => {
     password: req.body.password,
     email: req.body.email,
   });
-  res.redirect("/"); // 메인페이지로 이동
+ return res.status(401)
+  .send( '<script>alert("회원가입에 성공했습니다."); window.location.href = "/login";</script>'
+  ) ;
 });
 
 // 댓글 기능
@@ -438,12 +428,3 @@ app.post("/comment", async (req, res) => {
     res.status(500).send("댓글 작성 중 오류가 발생했습니다.");
   }
 });
-app.get("/chat/request", async (req, res) => {
-  await db.collection("chatroom").insertOne({
-    member: [req.user._id, req.query.writerId],
-    date: new Date(),
-  });
-  res.render("chatlist.ejs");
-});
-
-app.get("/chat/list", async (req, res) => {});
