@@ -12,13 +12,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
 
-.detail-bg h {
+.detail-bg  {
   font-size: 1.5rem;
   margin-bottom: 3vw;
-
 }
 
 table {
@@ -29,7 +27,6 @@ table {
   justify-content: center;
   align-items: center;
   text-align: center;
-
 }
 
 th,
@@ -51,7 +48,6 @@ h1 {
   justify-content: center;
   align-items: center;
   text-align: center;
-
 }
 
 .header a {
@@ -73,10 +69,7 @@ h1 {
 
 .grey-bg {
   background-color: whitesmoke;
-  /* padding: 20px; */
-  /* margin: 20px; */
   border-radius: 5px;
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
 }
 
 .detail-bg {
@@ -88,7 +81,6 @@ h1 {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-
 }
 
 /* 글쓰기 form */
@@ -123,7 +115,6 @@ h1 {
   width: 20%;
   background-color: #9BBEC8;
   color: #fff;
-  /* padding: 1vw 2vw; */
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -160,7 +151,6 @@ h1 {
   /* 이미지의 너비를 조정할 수 있습니다. */
   height: 30px;
   /* 이미지의 높이를 조정할 수 있습니다. */
-
 }
 
 /* 글 목록을 담는 컨테이너 */
@@ -243,9 +233,7 @@ h1 {
 
 a {
   text-decoration: none;
-  /* 링크의 밑줄 제거 */
   color: inherit;
-  /* 링크의 기본 색상으로 설정 */
 }
 
 .find-box {
@@ -258,40 +246,23 @@ a {
 
 .button-id {
   width: 30vw;
-  /* 버튼의 너비 설정 */
   background-color: #9BBEC8;
-  /* 배경색 */
   color: white;
-  /* 글자색 */
   border: none;
-  /* 테두리 없음 */
   padding: 10px 20px;
-  /* 내부 여백 */
   text-align: center;
-  /* 텍스트 가운데 정렬 */
   text-decoration: none;
-  /* 밑줄 제거 */
   display: inline-block;
-  /* 인라인 블록 요소로 표시 */
   font-size: 16px;
-  /* 글자 크기 */
   cursor: pointer;
-  /* 커서 모양 변경 */
   border-radius: 5px;
-  /* 버튼 모서리 둥글게 */
   margin-right: 10px;
-  /* 오른쪽 여백 */
 }
 
-
-/* 버튼 호버 과 */
 .button-id:hover {
   background-color: #0056b3;
-  /* 호버 시 배경색 변경 */
 }
 
-/* 버튼 클릭 효과 */
 .button-id:active {
   background-color: #004080;
-  /* 클릭 시 배경색 변경 */
 }
