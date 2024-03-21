@@ -20,6 +20,25 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const AWS = require('aws-sdk');
+
+
+AWS.config.credentials = new AWS.SharedIniFileCredentials({ profile: 'default' });
+
+// S3 서비스 객체 생성
+const S3 = new AWS.S3();
+
+// S3 버킷에서 객체 목록을 가져오는 예시 코드
+const bucketParams = { Bucket: 'boardproje' }; // 여기에 S3 버킷 이름을 입력하세요
+
+S3.listObjects(bucketParams, function(err, data) {
+    if (err) {
+        console.log("Error", err);
+    } else {
+        console.log("Success", data);
+    }
+});
+
 
 app.use(passport.initialize());
 app.use(
