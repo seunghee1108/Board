@@ -24,8 +24,8 @@ const AWS = require('aws-sdk');
 
 
 const credentials = new AWS.Credentials({
-  accessKeyId: 'ACCESS_KEY',
-  secretAccessKey: 'ACCESS_SECRET'
+  accessKeyId: process.env.ACCESS_KEY ,
+  secretAccessKey: process.env.ACCESS_SECRET
 });
 
 // 다른 AWS 서비스를 사용할 때 자격 증명 객체를 사용하도록 설정
