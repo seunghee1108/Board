@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="main.css">
-  </head>
-  <body class="grey-bg">
-    <%- include('header.ejs') %>
+</head>
 
-  <form class="form-box" action="/login" method="POST">
-    <h4>LOGIN</h4>
-    <input name="username">
-    <input name="password" type="password">
-    <button type="submit">SUBMIT</button>
-    <br>
-    <!-- <div class="find-box">
-      <button type="button" class="button-id" onclick="location.href='/findusername'">아이디찾기</button>
-      <button type="button" class="button-id" onclick="location.href='/forgot-password'">비밀번호찾기</button>
-    </div> -->
-</form> 
+<body class="grey-bg">
+  <%- include('header.ejs') %>
+
+    <form class="form-box" action="/login" method="POST">
+      <h4>LOGIN</h4>
+      <input name="username">
+      <input name="password" type="password">
+      <button type="submit">SUBMIT</button>
+      <br>
+    </form>
 
 </body>
+
 </html>
