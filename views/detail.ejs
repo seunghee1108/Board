@@ -13,45 +13,50 @@
   <%- include('header.ejs') %>
 
     <div class="detail-bg">
-        <h2><%= result.title %></h2>
-        <p>작성자: <%= result.username %></p>
-    
-        <p><%= result.content %></p>
+      <h2>
+        <%= result.title %>
+      </h2>
+      <p>작성자: <%= result.username %>
+      </p>
+
+      <p>
+        <%= result.content %>
+      </p>
 
 
-        <% if (result.img) { %>
-          <img src="<%= result.img %>" alt="이미지" width="300" height="200" margin-top="20px" />
+      <% if (result.img) { %>
+        <img src="<%= result.img %>" alt="이미지" width="300" height="200" margin-top="20px" />
         <% } %>
-      
 
-        <div class="button-group">
+
+          <div class="button-group">
             <a href="/edit/<%= result._id %>">
               📝
             </a>
             <a href="/delete/<%= result._id %>">🗑️ </a>
-        </div>
+          </div>
 
 
-        <hr style="margin-top: 60px" />
-        <div>
-          <% for (let i=0; i < result2.length; i++) { %>
-            <p>
-              <strong>
-                <%= result2[i].writer %>
-              </strong>
-              <%= result2[i].content %>
-            </p>
-            <% } %>
-        </div>
-  
-        <!-- 댓글 작성 폼 -->
-        <form class="comment-form" action="/comment" method="POST">
-          <input name="content" />
-          <input name="parentId" value="<%= result._id %>" style="display: none" />
-          <button type="submit">COMMENT</button>
-        </form>
-  
-      </div>
-  </body>
-  
-  </html>
+          <hr style="margin-top: 60px" />
+          <div>
+            <% for (let i=0; i < result2.length; i++) { %>
+              <p>
+                <strong>
+                  <%= result2[i].writer %>
+                </strong>
+                <%= result2[i].content %>
+              </p>
+              <% } %>
+          </div>
+
+          <!-- 댓글 작성 폼 -->
+          <form class="comment-form" action="/comment" method="POST">
+            <input name="content" />
+            <input name="parentId" value="<%= result._id %>" style="display: none" />
+            <button type="submit">COMMENT</button>
+          </form>
+
+    </div>
+</body>
+
+</html>
