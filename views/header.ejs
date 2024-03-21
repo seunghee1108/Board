@@ -1,27 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="main.css"> <!-- 다른 스타일 시트도 포함할 경우 -->
 </head>
+
 <body>
   <div class="header">
     <a href="/" style="font-size: 3rem;">HOME</a>
-    <a href="/write"><p>WRITE</p></a>
-    <a href="/list"><p>LIST</p></a>
-    <a href="/login" id="login"><p>LOGIN</p></a>
-    <a href="/logout" id="logout"><p>LOGOUT</p></a>
+    <a href="/write">
+      <p>WRITE</p>
+    </a>
+    <a href="/list">
+      <p>LIST</p>
+    </a>
+    <a href="/login" id="login">
+      <p>LOGIN</p>
+    </a>
+    <a href="/logout" id="logout">
+      <p>LOGOUT</p>
+    </a>
 
-    <a href="/join"><p>SIGN UP</p></a>
+    <a href="/join">
+      <p>SIGN UP</p>
+    </a>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       const loginLink = document.getElementById('login');
       const logoutLink = document.getElementById('logout');
       let isLoggedIn = false;
@@ -38,7 +50,7 @@
       }
 
       // 로그인 버튼 클릭 이벤트 처리
-      loginLink.addEventListener('click', function(event) {
+      loginLink.addEventListener('click', function (event) {
         event.preventDefault(); // 기본 동작 막기
         if (isLoggedIn) {
           // 로그아웃 로직 처리
@@ -52,7 +64,7 @@
       });
 
       // 로그아웃 버튼 클릭 이벤트 처리
-      logoutLink.addEventListener('click', function(event) {
+      logoutLink.addEventListener('click', function (event) {
         event.preventDefault(); // 기본 동작 막기
         // 로그아웃 로직 처리
         window.location.href = "/logout"; // 로그아웃 페이지로 이동
@@ -65,4 +77,5 @@
     });
   </script>
 </body>
+
 </html>

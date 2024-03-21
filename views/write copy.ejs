@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="main.css">
-  </head>
-  <body class="grey-bg">
-    
+</head>
+
+<body class="grey-bg">
+
   <%- include('header.ejs') %>
 
-  <form class="form-box" action="/newPost" method="POST">
-    <h4>WRITE</h4>
-    <input name="title" class="input-title" placeholder="제목을 입력하세요.">
-    <input name="content" class="input-content" placeholder="내용을 입력하세요.">
-    <!-- <input type="file" name="image" accept="image/*"> -->
-    <button type="submit">SUBMIT</button>
-</form> 
+    <form class="form-box" action="/newPost" method="POST">
+      <h4>WRITE</h4>
+      <input name="title" class="input-title" placeholder="제목을 입력하세요.">
+      <input name="content" class="input-content" placeholder="내용을 입력하세요.">
+      <!-- <input type="file" name="image" accept="image/*"> -->
+      <button type="submit">SUBMIT</button>
+    </form>
 
 </body>
-</html>
 
+</html>

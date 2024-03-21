@@ -1,11 +1,17 @@
 <div class="header">
   <a href="/" style="font-size: 3rem;">HOME</a>
   <% if (isLoggedIn) { %>
-      <a href="/logout">LOGOUT</a>
-  <% } else { %>
+    <a href="/logout">LOGOUT</a>
+    <% } else { %>
       <a href="/login">LOGIN</a>
-  <% } %>
-  <a href="/write"><p>WRITE</p></a>
-  <a href="/list"><p>LIST</p></a>
-  <a href="/join"><p>SIGN UP</p></a>
+      <% } %>
+        <a href="/write">
+          <p>WRITE</p>
+        </a>
+        <a href="/list">
+          <p>LIST</p>
+        </a>
+        <a href="/join">
+          <p>SIGN UP</p>
+        </a>
 </div>
