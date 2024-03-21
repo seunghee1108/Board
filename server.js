@@ -23,13 +23,21 @@ const LocalStrategy = require("passport-local");
 const AWS = require('aws-sdk');
 
 
+const credentials = new AWS.Credentials({
+  accessKeyId: 'ACCESS_KEY',
+  secretAccessKey: 'ACCESS_SECRET'
+});
+
+// 다른 AWS 서비스를 사용할 때 자격 증명 객체를 사용하도록 설정
+AWS.config.credentials = credentials;
+
 AWS.config.credentials = new AWS.SharedIniFileCredentials({ profile: 'default' });
 
 // S3 서비스 객체 생성
 const S3 = new AWS.S3();
 
 // S3 버킷에서 객체 목록을 가져오는 예시 코드
-const bucketParams = { Bucket: 'boardproje' }; // 여기에 S3 버킷 이름을 입력하세요
+const bucketParams = { Bucket: 'boardprojet' }; // 여기에 S3 버킷 이름을 입력하세요
 
 S3.listObjects(bucketParams, function(err, data) {
     if (err) {
