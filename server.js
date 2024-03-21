@@ -356,7 +356,14 @@ app.post(
 // 로그아웃 요청 처리
 app.get("/logout", function (req, res) {
   req.logout(function () {
-    res.redirect("/");
+    return (
+      res
+        .status(401)
+        // res.redirect("/");
+        .send(
+          '<script>alert("로그아웃 되었습니다."); window.location.href = "/";</script>'
+        )
+    );
   });
 });
 
@@ -400,9 +407,11 @@ app.post("/join", async (req, res) => {
     password: req.body.password,
     email: req.body.email,
   });
- return res.status(401)
-  .send( '<script>alert("회원가입에 성공했습니다."); window.location.href = "/login";</script>'
-  ) ;
+  return res
+    .status(401)
+    .send(
+      '<script>alert("회원가입에 성공했습니다."); window.location.href = "/login";</script>'
+    );
 });
 
 // 댓글 기능
@@ -418,7 +427,7 @@ app.post("/comment", async (req, res) => {
   try {
     await db.collection("comment").insertOne({
       content: req.body.content,
-      writerId: new ObjectId(req.user._id), // req.user._id로 수정
+      writerId: new ObjectId(req.user._id), 
       writer: req.user.username,
       parentId: new ObjectId(req.body.parentId),
     });
